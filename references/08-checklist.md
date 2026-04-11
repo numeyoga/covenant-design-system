@@ -269,12 +269,12 @@ Chaque section correspond à un document du design system. Les items sont formul
 
 Au-delà de cette checklist manuelle, les outils CLI suivants doivent passer sans erreur :
 
-| Commande         | Vérifie                                          | Bloquant ? |
-| ---------------- | ------------------------------------------------ | ---------- |
-| `npm run lint:css` | Conformité CSS vs Baseline, syntaxe Stylelint   | Oui        |
-| `npm run lint:js`  | Conformité JS API vs Baseline, syntaxe ESLint   | Oui        |
-| Contrast checker | Ratios de contraste WCAG AA sur les tokens       | Oui        |
-| HTML validator   | Validité sémantique du HTML                      | Oui        |
+| Commande           | Vérifie                                       | Bloquant ? |
+| ------------------ | --------------------------------------------- | ---------- |
+| `npm run lint:css` | Conformité CSS vs Baseline, syntaxe Stylelint | Oui        |
+| `npm run lint:js`  | Conformité JS API vs Baseline, syntaxe ESLint | Oui        |
+| Contrast checker   | Ratios de contraste WCAG AA sur les tokens    | Oui        |
+| HTML validator     | Validité sémantique du HTML                   | Oui        |
 
 ---
 
