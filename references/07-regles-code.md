@@ -50,6 +50,7 @@ Tout document HTML commence par cette structure :
     <header class="app-shell__topbar">...</header>
     <nav class="app-shell__sidenav" aria-label="Navigation principale">...</nav>
     <main class="app-shell__main">...</main>
+    <footer class="app-shell__status" aria-label="Barre de statut">...</footer>
   </div>
 
   <!-- Scripts -->
@@ -864,5 +865,6 @@ Avant de valider un fichier, vérifier les points suivants :
 
 | Version | Date       | Changement                                                              |
 | ------- | ---------- | ----------------------------------------------------------------------- |
-| 0.1     | 2026-03-25 | Création initiale                                                       |
-| 0.2     | 2026-04-11 | Ajout §3.9 CSS Containment, §3.10 @supports, §4.8 requestIdleCallback  |
+| 0.1     | 2026-03-25 | Création initiale                                                           |
+| 0.2     | 2026-04-11 | Ajout §3.9 CSS Containment, §3.10 @supports, §4.8 requestIdleCallback      |
+| 0.3     | 2026-04-11 | Ajout `<footer class="app-shell__status">` dans le template HTML de base   |

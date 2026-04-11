@@ -72,10 +72,12 @@ Chaque section correspond à un document du design system. Les items sont formul
 
 ### App Shell
 
-- [ ] La page utilise la structure App Shell (topbar + sidenav + main)
+- [ ] La page utilise la structure App Shell (topbar + sidenav + main + statusbar)
 - [ ] L'App Shell occupe `100dvh`
 - [ ] Le scroll global est désactivé (`overflow: hidden` sur `.app-shell`)
 - [ ] Seules les zones désignées scrollent (main, sidenav, zones internes)
+- [ ] La barre de statut est présente dans le markup (`<footer class="app-shell__status">`)
+- [ ] Topbar, sidenav et statusbar restent visibles et fixes lors du scroll du contenu principal
 
 ### Grille
 
@@ -285,5 +287,6 @@ Au-delà de cette checklist manuelle, les outils CLI suivants doivent passer san
 
 | Version | Date       | Changement                                          |
 | ------- | ---------- | --------------------------------------------------- |
-| 0.1     | 2026-03-25 | Création initiale                                   |
+| 0.1     | 2026-03-25 | Création initiale                                    |
 | 0.2     | 2026-04-11 | Ajout items CSS Containment dans section Performance |
+| 0.3     | 2026-04-11 | Ajout items status bar et scroll containment (§3)    |
