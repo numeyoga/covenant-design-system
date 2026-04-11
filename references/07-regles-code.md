@@ -419,6 +419,137 @@ Chaque composant a son propre fichier CSS. Le fichier suit cette structure :
 5. Visuel (`background`, `border`, `border-radius`, `box-shadow`, `opacity`)
 6. Comportement (`cursor`, `pointer-events`, `transition`, `animation`, `overflow`)
 
+### 3.9 CSS Containment
+
+#### Principe
+
+La propriété `contain` permet d'isoler un composant du reste de l'arbre de rendu. Le navigateur peut ainsi optimiser le recalcul de style, le layout et le paint en limitant leur portée au composant concerné.
+
+**Convention** : tout composant autonome (carte, widget, ligne de tableau, item de liste) doit déclarer `contain: content` sur son élément racine.
+
+```css
+.card {
+  contain: content;
+  /* ... */
+}
+
+.data-table__row {
+  contain: content;
+  /* ... */
+}
+```
+
+`contain: content` est l'équivalent de `contain: layout paint style`. Il isole le composant sans affecter son dimensionnement dans le flux.
+
+#### Exceptions — ne pas appliquer `contain: content`
+
+Trois situations interdisent l'utilisation de `contain: content` :
+
+| Situation | Raison | Composants concernés |
+| --- | --- | --- |
+| Le composant a des enfants en `position: fixed` | `contain: content` capture les descendants `fixed` — ils deviennent relatifs au composant, pas au viewport | Dropdown, Tooltip, Popover |
+| Le composant a un overflow visible intentionnel (ex: tooltip ou badge qui déborde) | `contain: content` implique `overflow: hidden` — le débordement est silencieusement coupé | Tooltip, composants avec badge en surimpression |
+| Le composant participe à un stacking context partagé complexe | `contain: content` crée un nouveau stacking context — cela multiplie les contextes et complique le débogage `z-index` | Zones avec overlay imbriqués |
+
+Pour ces cas, utiliser `contain: layout style` (sans `paint`) ou ne pas appliquer `contain` du tout. Documenter l'exception dans le fichier CSS du composant.
+
+```css
+/* Exception documentée : contain: content retiré car le dropdown enfant
+   utilise position: fixed pour se positionner par rapport au viewport */
+.select-wrapper {
+  /* contain: content; ← retiré intentionnellement */
+  position: relative;
+}
+```
+
+#### `content-visibility: auto` pour les listes longues
+
+Pour les composants qui contiennent de longues listes (> 200 items) et qui n'utilisent pas de virtualisation JS, `content-visibility: auto` permet au navigateur de ne pas rendre les éléments hors viewport. À utiliser en complément de `contain-intrinsic-size` pour éviter le saut de scrollbar :
+
+```css
+.list__item {
+  content-visibility: auto;
+  contain-intrinsic-size: 0 3rem; /* hauteur estimée de l'item */
+}
+```
+
+**Quand utiliser quelle approche** :
+
+| Situation | Approche recommandée |
+| --- | --- |
+| Liste ≤ 200 items | `contain: content` sur chaque item, rien d'autre |
+| Liste > 200 items, scrolling natif suffisant | `content-visibility: auto` + `contain-intrinsic-size` |
+| Liste > 200 items, interactions complexes (tri, sélection multiple) | Pagination ou scroll virtuel JS (voir `08-checklist.md` §9) |
+
+#### Gotchas à connaître
+
+Ces comportements contre-intuitifs s'appliquent dès qu'un ancêtre porte `contain: content` ou `contain: layout` :
+
+1. **Capture de `position: fixed`** : un enfant `position: fixed` est positionné par rapport au composant contenant, pas par rapport au viewport. Symptôme : un dropdown ou une modale "reste collé" à son parent au lieu de s'afficher en surimpression globale.
+
+2. **Clipping silencieux** : `contain: content` implique `overflow: hidden`. Tout débordement (badge, tooltip, ombre portée très étendue) est coupé sans avertissement.
+
+3. **Multiplication des stacking contexts** : chaque composant avec `contain: content` crée son propre stacking context. Si plusieurs composants coexistent sur la même zone (ex: ligne de tableau avec actions et tooltip), l'ordre des `z-index` n'est résolu qu'à l'intérieur de chaque contexte. Symptôme : un `z-index: var(--z-tooltip)` ne passe pas au-dessus d'un composant frère malgré une valeur plus haute.
+
+### 3.10 Détection de capacité CSS — `@supports`
+
+`@supports` permet de conditionner des déclarations CSS à la disponibilité d'une propriété ou d'une valeur. C'est le mécanisme standard pour écrire des fallbacks en CSS natif.
+
+#### Quand utiliser `@supports`
+
+- Quand une fonctionnalité CSS est en statut **Limited Availability** (pas encore dans Baseline Newly Available) et qu'un fallback acceptable existe.
+- Quand une amélioration progressive est possible : les navigateurs qui supportent la feature ont une meilleure expérience, les autres une expérience fonctionnelle mais plus basique.
+
+```css
+/* Amélioration progressive : scroll fluide si supporté */
+@supports (scroll-behavior: smooth) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+/* Fallback pour une propriété récente */
+.container {
+  /* Fallback pour les navigateurs sans support subgrid */
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+@supports (grid-template-rows: subgrid) {
+  .container {
+    grid-template-rows: subgrid;
+  }
+}
+```
+
+#### Règles
+
+- Ne **pas** utiliser `@supports` pour des fonctionnalités déjà en Baseline Newly Available — elles sont garanties par les navigateurs cibles.
+- Toujours documenter dans un commentaire pourquoi le `@supports` est nécessaire : statut Baseline de la feature, date prévisible de promotion.
+- Un `@supports` sans fallback utile (où l'absence de support rend la page inutilisable) est un signe que la feature ne devrait pas être utilisée — vérifier le statut Baseline avec `webstatus.dev`.
+
+```css
+/* Exemple correctement documenté */
+/* grid-template-rows: subgrid — Baseline Newly Available depuis 2023.
+   Fallback : hauteurs fixes sur les éléments enfants. */
+.card-grid__item {
+  min-height: 12rem; /* fallback */
+}
+
+@supports (grid-template-rows: subgrid) {
+  .card-grid {
+    grid-template-rows: subgrid;
+  }
+  .card-grid__item {
+    min-height: unset;
+  }
+}
+```
+
+#### Lien avec la checklist
+
+La `08-checklist.md` exige : "aucune fonctionnalité Limited Availability sans fallback documenté". Le fallback doit être implémenté via `@supports` — pas via un polyfill JS ni via une condition commentée.
+
 ---
 
 ## 4. JavaScript
@@ -544,6 +675,40 @@ async function loadData(url) {
 - Utiliser `const` par défaut.
 - Utiliser `let` uniquement si la variable est réassignée.
 - Ne jamais utiliser `var`.
+
+### 4.8 Scheduling — `requestIdleCallback`
+
+Pour les tâches non urgentes qui ne doivent pas bloquer l'interaction utilisateur (analytics, pré-chargement, initialisation différée, écriture en cache), utiliser `requestIdleCallback` plutôt qu'un `setTimeout` arbitraire.
+
+```js
+// Correct : tâche non urgente différée aux périodes d'inactivité
+requestIdleCallback(() => {
+  prefetchNextPage();
+});
+
+// Avec timeout de sécurité : la tâche s'exécute au plus tard après 2s
+requestIdleCallback(() => {
+  logAnalyticsEvent('page_view');
+}, { timeout: 2000 });
+
+// Incorrect pour les tâches non urgentes
+setTimeout(() => {
+  prefetchNextPage();
+}, 100); // délai arbitraire, sans garantie sur l'état du thread
+```
+
+**Quand utiliser `requestIdleCallback`** :
+
+| Tâche | Utiliser `requestIdleCallback` ? |
+| --- | --- |
+| Mise à jour d'un état visuel suite à une action utilisateur | Non — doit être immédiat |
+| Appel API déclenché par l'utilisateur | Non — doit être immédiat |
+| Pré-chargement de données pour la navigation suivante | Oui |
+| Initialisation de composants hors-viewport au chargement | Oui |
+| Envoi d'événements analytics | Oui |
+| Écriture dans `localStorage` ou `sessionStorage` | Oui |
+
+**Note** : `requestIdleCallback` est Baseline Widely Available. Il n'existe pas de fallback nécessaire pour les navigateurs cibles.
 
 ---
 
@@ -697,6 +862,7 @@ Avant de valider un fichier, vérifier les points suivants :
 
 ## 9. Versioning de ce document
 
-| Version | Date       | Changement        |
-| ------- | ---------- | ----------------- |
-| 0.1     | 2026-03-25 | Création initiale |
+| Version | Date       | Changement                                                              |
+| ------- | ---------- | ----------------------------------------------------------------------- |
+| 0.1     | 2026-03-25 | Création initiale                                                       |
+| 0.2     | 2026-04-11 | Ajout §3.9 CSS Containment, §3.10 @supports, §4.8 requestIdleCallback  |

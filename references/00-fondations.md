@@ -16,6 +16,14 @@ Un design system **est** :
 - Un contrat partagé entre concepteurs et développeurs (humains ou IA).
 - Un système vivant qui évolue avec les besoins.
 
+### Limites
+
+Ce design system garantit la cohérence visuelle et comportementale **uniquement si ses règles sont correctement suivies**. Il ne constitue pas une garantie automatique de qualité :
+
+- **Code généré par une IA** : une IA peut produire du code syntaxiquement conforme mais sémantiquement incorrect, ou omettre des règles qu'elle n'a pas lues. Tout code généré par une IA doit faire l'objet d'une relecture humaine avant mise en production.
+- **Accessibilité** : les règles du design system couvrent les exigences WCAG 2.2 AA au niveau des composants et tokens. Elles ne substituent pas à un audit d'accessibilité de la page complète ni à des tests avec des technologies d'assistance réelles.
+- **Qualité métier** : le design system ne couvre pas la logique applicative, la validation des données, la sécurité ou la performance réseau.
+
 ### Pourquoi ce design system existe
 
 Ce design system est conçu pour être lu et appliqué aussi bien par un développeur humain que par une IA générative. Chaque règle doit donc être :
@@ -309,3 +317,4 @@ Ces principes guident toute décision non couverte explicitement par une règle 
 | ------- | ---------- | ----------------------------------------------------------------------------- |
 | 0.1     | 2026-03-25 | Création initiale                                                             |
 | 0.2     | 2026-03-25 | Viewport adapté à l'écran 2560×1440, Baseline Newly Available, outillage CLI  |
+| 0.3     | 2026-04-11 | Ajout section Limites                                                         |

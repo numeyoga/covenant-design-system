@@ -262,6 +262,9 @@ Chaque section correspond à un document du design system. Les items sont formul
 - [ ] Les scripts JS sont en `type="module"` (defer implicite)
 - [ ] Les images ont des dimensions explicites (`width`/`height`) pour éviter le layout shift
 - [ ] Les listes longues (> 200 éléments) utilisent la pagination ou le scroll virtuel
+- [ ] Tout composant autonome déclare `contain: content` sur son élément racine
+- [ ] Les exceptions à `contain: content` (enfants `fixed`, overflow visible, stacking context complexe) sont documentées dans le fichier CSS du composant
+- [ ] Les composants avec enfants `position: fixed` (Dropdown, Tooltip) ne portent **pas** `contain: content`
 
 ---
 
@@ -280,6 +283,7 @@ Au-delà de cette checklist manuelle, les outils CLI suivants doivent passer san
 
 ## 11. Versioning de ce document
 
-| Version | Date       | Changement        |
-| ------- | ---------- | ----------------- |
-| 0.1     | 2026-03-25 | Création initiale |
+| Version | Date       | Changement                                          |
+| ------- | ---------- | --------------------------------------------------- |
+| 0.1     | 2026-03-25 | Création initiale                                   |
+| 0.2     | 2026-04-11 | Ajout items CSS Containment dans section Performance |
