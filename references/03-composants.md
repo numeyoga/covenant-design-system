@@ -17,6 +17,7 @@ Ces règles s'ajoutent à celles de [07-regles-code.md](./07-regles-code.md) et 
 5. **États dynamiques** exprimés par attributs HTML natifs (`disabled`, `open`, `hidden`) ou ARIA (`aria-expanded`, `aria-selected`, `aria-pressed`, etc.).
 6. **Tokens uniquement** : aucune valeur brute dans le CSS du composant.
 7. **Focus visible** : tout composant interactif hérite du style `:focus-visible` global. Si un composant nécessite un style de focus spécifique, il est documenté.
+8. **CSS Containment** : tout composant autonome déclare `contain: content` sur son élément racine. Les exceptions (composants avec enfants `position: fixed`, overflow visible intentionnel ou stacking context partagé) doivent être documentées dans le fichier CSS du composant. Voir `07-regles-code.md §3.9` pour le détail.
 
 ### Tailles standard
 
@@ -1328,6 +1329,7 @@ _*Les contrôles de formulaire sont interactifs par nature HTML mais ne nécessi
 
 ## 16. Versioning de ce document
 
-| Version | Date       | Changement        |
-| ------- | ---------- | ----------------- |
-| 0.1     | 2026-03-25 | Création initiale |
+| Version | Date       | Changement                              |
+| ------- | ---------- | --------------------------------------- |
+| 0.1     | 2026-03-25 | Création initiale                       |
+| 0.2     | 2026-04-11 | Ajout convention CSS Containment (item 8) |

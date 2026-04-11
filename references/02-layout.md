@@ -32,16 +32,16 @@ Toutes les applications couvertes par ce design system utilisent un **App Shell*
 │ (fixed)  │                                              │
 │          │                                              │
 ├──────────┴──────────────────────────────────────────────┤
-│                    Status Bar (optionnel)                │
+│                      Status Bar                          │
 └─────────────────────────────────────────────────────────┘
 ```
 
-| Région       | Rôle                                             | Comportement                                    |
-| ------------ | ------------------------------------------------ | ----------------------------------------------- |
-| Top Bar      | Identité de l'app, recherche globale, user menu  | Fixe en haut, pleine largeur                    |
-| Side Nav     | Navigation principale, arborescence               | Fixe à gauche, rétractable (collapsed/expanded) |
-| Main Content | Zone de travail, contenu applicatif               | Scrollable verticalement                        |
-| Status Bar   | Informations système, actions globales (optionnel)| Fixe en bas, pleine largeur                     |
+| Région       | Rôle                                            | Comportement                                                    |
+| ------------ | ----------------------------------------------- | --------------------------------------------------------------- |
+| Top Bar      | Identité de l'app, recherche globale, user menu | Fixe en haut, pleine largeur — ne défile jamais                 |
+| Side Nav     | Navigation principale, arborescence              | Fixe à gauche, rétractable (collapsed/expanded) — ne défile pas |
+| Main Content | Zone de travail, contenu applicatif              | Scrollable verticalement — scrollbar contenu dans la zone       |
+| Status Bar   | Informations système, actions globales           | Fixe en bas, pleine largeur — ne défile jamais                  |
 
 ### 2.2 Implémentation CSS Grid
 
@@ -78,8 +78,25 @@ Toutes les applications couvertes par ce design system utilisent un **App Shell*
 
 .app-shell__status {
   grid-area: status;
+  display: flex;
+  align-items: center;
+  padding: 0 var(--padding-md);
+  overflow: hidden;
+  background-color: var(--color-bg-subtle);
+  border-top: var(--border-width-default) solid var(--color-border-default);
+  z-index: var(--z-sticky);
 }
 ```
+
+#### Scroll containment — principe
+
+Le scroll du Main Content est **contenu dans sa zone** : topbar, sidenav et statusbar restent visibles et fixes quoi qu'il arrive. Ce comportement découle directement de la structure CSS Grid :
+
+1. `.app-shell { height: 100dvh; overflow: hidden }` — l'ensemble de la coque est limité à la hauteur exacte du viewport. Rien ne peut déborder.
+2. Les lignes du grid sont dimensionnées explicitement : `var(--shell-topbar-height)` + `1fr` + `var(--shell-statusbar-height)`. La ligne du milieu (`1fr`) prend **uniquement** l'espace restant entre topbar et statusbar.
+3. `.app-shell__main { overflow-y: auto }` — le main crée son propre contexte de scroll, autonome et cloisonné dans sa cellule de grid.
+
+Conséquence pratique : topbar, sidenav et statusbar sont des cellules de grid à hauteur fixe. Elles ne participent jamais au scroll du main et ne sont jamais poussées hors de l'écran.
 
 ### 2.3 Dimensions de l'App Shell
 
@@ -92,8 +109,8 @@ Toutes les applications couvertes par ce design system utilisent un **App Shell*
   --shell-nav-width:        16rem;    /* 256px — expanded   */
   --shell-nav-width-collapsed: 3.5rem; /* 56px — collapsed  */
 
-  /* Status Bar (optionnel, 0 par défaut) */
-  --shell-statusbar-height: 0px;
+  /* Status Bar */
+  --shell-statusbar-height: 1.75rem; /* 28px */
 
   /* Padding du Main Content */
   --shell-main-padding:     var(--padding-lg);  /* 16px */
@@ -101,6 +118,13 @@ Toutes les applications couvertes par ce design system utilisent un **App Shell*
 ```
 
 **Note** : `100dvh` (dynamic viewport height) est Baseline Widely Available. Il gère correctement les barres d'adresse mobiles, mais sert surtout ici à occuper exactement la hauteur du viewport navigateur sur desktop.
+
+**Désactiver la barre de statut** : si une application n'en a pas besoin, surcharger le token **et** masquer l'élément :
+
+```css
+:root { --shell-statusbar-height: 0px; }
+.app-shell__status { display: none; }
+```
 
 ### 2.4 Side Nav rétractable
 
@@ -143,7 +167,7 @@ document.querySelector('.app-shell').toggleAttribute('data-nav-collapsed');
     position: fixed;
     left: 0;
     top: var(--shell-topbar-height);
-    bottom: 0;
+    bottom: var(--shell-statusbar-height);
     width: var(--shell-nav-width);
     transform: translateX(-100%);
     transition: transform var(--duration-normal) var(--ease-out);
@@ -595,6 +619,7 @@ Pour la lisibilité, les propriétés de layout sont déclarées dans cet ordre 
 
 ## 9. Versioning de ce document
 
-| Version | Date       | Changement        |
-| ------- | ---------- | ----------------- |
-| 0.1     | 2026-03-25 | Création initiale |
+| Version | Date       | Changement                                                                                              |
+| ------- | ---------- | ------------------------------------------------------------------------------------------------------- |
+| 0.1     | 2026-03-25 | Création initiale                                                                                       |
+| 0.2     | 2026-04-11 | Status bar intégrée comme élément standard, scroll containment documenté, fix sidenav overlay tablette  |
