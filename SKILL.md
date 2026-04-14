@@ -19,7 +19,7 @@ description: >
 
 This skill enforces a comprehensive design system for **personal-use backoffice/dashboard SPAs** built with the **Vanilla Web** stack (HTML5, native CSS custom properties, vanilla JS ES2024+). No framework, preprocessor, or transpiler in the production bundle.
 
-The design system is documented across 9 reference files in the `references/` directory. This SKILL.md contains the critical rules that apply to **every** task, plus a routing table to load only the specific reference files needed.
+The design system is documented across 11 reference files in the `references/` directory. This SKILL.md contains the critical rules that apply to **every** task, plus a routing table to load only the specific reference files needed.
 
 ---
 
@@ -129,13 +129,25 @@ Read **only** the files relevant to your current task. Always start with the rou
 | HTML/CSS/JS code conventions                                         | `07-regles-code.md`             |
 | File/project structure                                               | `07-regles-code.md` §5–§6       |
 | **Final review / conformity audit**                                  | `08-checklist.md`               |
+| Visual polish, hierarchy, depth, anti-AI tells (qualitative guide)   | `09-guide-to-polished-design.md` |
+| Dashboard layout patterns, KPI cards anatomy, AI anti-patterns       | `09-guide-to-polished-design.md` |
+| Screen anatomy, content zones, sticky behavior, content widths       | `10-guide-for-screen-construction.md` §5 |
+| Button placement (page, form, modal, table, toolbar)                 | `10-guide-for-screen-construction.md` §1–§2 |
+| Destructive actions, danger zone, confirmation tiers                 | `10-guide-for-screen-construction.md` §2 |
+| Bulk actions, selection mechanics, floating action bar               | `10-guide-for-screen-construction.md` §3 |
+| Settings pages structure, sidebar, per-section save                  | `10-guide-for-screen-construction.md` §4 |
+| List → detail transitions, drawers vs full page vs split view        | `10-guide-for-screen-construction.md` §6 |
 
 ### Reading Strategy
 
 1. **Simple task** (e.g., "add a button"): Read the specific component section only. The critical rules above give you enough context.
 2. **Medium task** (e.g., "build a form page"): Read `02-layout.md` + the relevant sections of `03-composants.md` + `04-patterns.md` §4.
-3. **Full page or new project**: Read `00-fondations.md`, `01-design-tokens.md`, `02-layout.md`, `07-regles-code.md`, then the component/pattern files as needed.
+3. **Full page or new project**: Read `00-fondations.md`, `01-design-tokens.md`, `02-layout.md`, `07-regles-code.md`, then the component/pattern files as needed. For dashboard or screen-level composition decisions (where to place actions, how to compose a list/detail view, how to avoid generic "AI-generated" appearance), also read `09-guide-to-polished-design.md` and `10-guide-for-screen-construction.md`.
 4. **Code review or audit**: Read `08-checklist.md` and cross-reference with the specific documents for any failing items.
+
+### Note on guides 09 and 10
+
+Files `09-guide-to-polished-design.md` and `10-guide-for-screen-construction.md` are **qualitative guides** (principles, placement rules, anti-patterns) and complement — they do not replace — the normative documents 00–08. The raw CSS values they cite (hex colors, pixel sizes, hsl values) are illustrative only: any value that ends up in delivered code **must still be expressed via the design tokens defined in `01-design-tokens.md`**. When a guide mentions e.g. `#F9FAFB` for a table header background, translate it to the appropriate `--color-bg-*` token; when it cites `48px` row height, use the corresponding `--space-*` / `--padding-*` token.
 
 ---
 
