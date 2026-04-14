@@ -120,6 +120,10 @@ Read **only** the files relevant to your current task. Always start with the rou
 | Toasts / notifications                                               | `04-patterns.md` §8             |
 | Empty states                                                         | `04-patterns.md` §9             |
 | Sidebar navigation                                                   | `04-patterns.md` §10            |
+| Sélection en masse, bulk actions                                     | `04-patterns.md` §5.6           |
+| Page de paramètres, settings                                         | `04-patterns.md` §11            |
+| Actions destructives, niveaux de confirmation                        | `04-patterns.md` §6.5           |
+| Hiérarchie visuelle, qualité perçue de l'interface                   | `01-design-tokens.md` §3.7 + `03-composants.md` §2.2 |
 | Loading states, skeletons, spinners                                  | `05-etats-feedback.md` §3       |
 | Success states                                                       | `05-etats-feedback.md` §4       |
 | Error states, validation                                             | `05-etats-feedback.md` §5       |
@@ -200,6 +204,11 @@ project/
 - ❌ Inline styles or `!important` (except documented utility exceptions)
 - ❌ Z-index values not from the token layer system
 - ❌ Animations without `prefers-reduced-motion` respect
+- ❌ Deux boutons `primary` dans la même section visible
+- ❌ Bouton destructif adjacent à un bouton de confirmation sans séparation visuelle
+- ❌ Barre d'actions bulk dans la toolbar (utiliser la barre flottante)
+- ❌ Sauvegarde automatique mélangée à une sauvegarde manuelle dans le même formulaire
+- ❌ `contain: content` sur un composant dont un enfant utilise `position: fixed`
 
 ---
 

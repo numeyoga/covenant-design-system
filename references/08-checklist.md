@@ -58,6 +58,7 @@ Chaque section correspond à un document du design system. Les items sont formul
 - [ ] Les rayons de bordure utilisent des tokens `--radius-*`
 - [ ] Les ombres utilisent des tokens `--shadow-*`
 - [ ] Les `z-index` utilisent des tokens `--z-*` (aucune valeur numérique brute)
+- [ ] Les en-têtes de tableau sticky utilisent `--z-table-header` (pas `--z-base`)
 
 ### Transitions
 
@@ -139,6 +140,10 @@ Chaque section correspond à un document du design system. Les items sont formul
 - [ ] Un seul bouton `primary` par vue
 - [ ] Les boutons icône seule ont un `aria-label`
 - [ ] Les icônes dans les boutons portent `aria-hidden="true"`
+- [ ] Un seul bouton `primary` par section visible (jamais deux côte à côte)
+- [ ] Les boutons destructifs sont physiquement séparés des boutons de confirmation (pas dans le même groupe)
+- [ ] Les actions destructives de la page de paramètres sont isolées dans une section "Zone de danger"
+- [ ] Dans les menus dropdown, les actions destructives sont les dernières items, après un séparateur
 
 ### Formulaires
 
@@ -210,6 +215,20 @@ Chaque section correspond à un document du design system. Les items sont formul
 - [ ] L'état vide remplace le contenu (pas de tableau vide à côté)
 - [ ] Le message indique pourquoi c'est vide et propose une action
 
+### Sélection en masse
+
+- [ ] La colonne checkbox est la première (la plus à gauche)
+- [ ] La barre d'actions flottante est utilisée (pas la toolbar)
+- [ ] Les actions non-destructives en masse s'exécutent immédiatement avec toast
+- [ ] Les actions destructives en masse déclenchent une modal précisant le nombre d'éléments
+
+### Page de paramètres
+
+- [ ] Sauvegarde explicite par carte (bouton désactivé jusqu'à modification)
+- [ ] Auto-save limité aux toggles isolés à faible risque
+- [ ] Zone de danger isolée en bas de page avec bordure rouge
+- [ ] Avertissement `beforeunload` implémenté
+
 ### Sidebar Navigation
 
 - [ ] La page active porte `aria-current="page"`
@@ -267,6 +286,7 @@ Chaque section correspond à un document du design system. Les items sont formul
 - [ ] Tout composant autonome déclare `contain: content` sur son élément racine
 - [ ] Les exceptions à `contain: content` (enfants `fixed`, overflow visible, stacking context complexe) sont documentées dans le fichier CSS du composant
 - [ ] Les composants avec enfants `position: fixed` (Dropdown, Tooltip) ne portent **pas** `contain: content`
+- [ ] Le style de focus utilise la technique double anneau (`box-shadow: 0 0 0 2px bg, 0 0 0 4px focus-ring`) plutôt qu'un simple `outline`
 
 ---
 

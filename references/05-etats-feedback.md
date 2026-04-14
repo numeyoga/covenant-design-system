@@ -190,13 +190,15 @@ Un bouton qui déclenche une opération asynchrone affiche un état "en cours" :
 
 ### 3.6 Quand utiliser quel type de chargement
 
-| Situation                                   | Type de chargement    |
-| ------------------------------------------- | --------------------- |
-| Page entière non chargée                    | Loading page          |
-| Section/widget indépendant                  | Loading section       |
-| Liste ou tableau dont la structure est connue | Skeleton loading    |
-| Action utilisateur (bouton)                 | Bouton loading        |
-| Chargement de données supplémentaires (scroll infini, pagination) | Spinner inline |
+| Durée estimée | Situation | Type de chargement |
+|---|---|---|
+| < 1 s | Toute situation | Aucun indicateur — un flash de skeleton serait plus perturbant que l'attente |
+| 1–5 s | Page entière non chargée | Loading page (spinner centré + texte) |
+| 1–5 s | Section/widget indépendant dont la structure est connue | Skeleton loading |
+| 1–5 s | Section/widget dont la structure est inconnue | Loading section (spinner) |
+| 1–10 s | Action utilisateur déclenchée par un bouton | Bouton loading (`data-loading`) |
+| > 10 s | Upload, import, traitement par lot | Barre de progression avec pourcentage |
+| Indéfini | Chargement de données supplémentaires (pagination, scroll) | Spinner inline en bas de liste |
 
 ---
 
@@ -258,6 +260,27 @@ Pour les formulaires avec sauvegarde automatique (auto-save) :
 
 Les trois états : `data-state="saving"` (en cours), absent (enregistré), `data-state="error"` (échec).
 
+### 4.3 Toast avec action d'annulation (Undo)
+
+Pour les actions de faible gravité (archivage, retrait d'un tag), le toast de succès inclut un bouton "Annuler" avec une fenêtre de 5–10 secondes avant exécution définitive. Ce pattern évite une modale de confirmation pour les actions facilement réversibles.
+
+```html
+<div class="toast" data-variant="success" role="status">
+  <svg class="toast__icon" aria-hidden="true"><!-- icon-check --></svg>
+  <span class="toast__message">Élément archivé.</span>
+  <button class="btn" data-variant="ghost" data-size="sm"
+          type="button" data-js-toast-undo>
+    Annuler
+  </button>
+  <button class="btn" data-variant="ghost" data-size="sm"
+          aria-label="Fermer" data-js-toast-close>
+    <svg class="btn__icon" aria-hidden="true"><!-- icon-x --></svg>
+  </button>
+</div>
+```
+
+**Règle** : le bouton "Annuler" est absent des toasts informatifs et des toasts d'erreur. Il n'est pertinent que sur les toasts de succès confirmant une action réversible.
+
 ---
 
 ## 5. États d'erreur
@@ -273,6 +296,8 @@ Les trois états : `data-state="saving"` (en cours), absent (enregistré), `data
 | Erreur serveur (5xx)           | Haute    | Alert danger     | Réessayer ou contacter support          |
 | Erreur critique (app cassée)   | Critique | Page d'erreur    | Recharger la page                       |
 | Ressource introuvable (404)    | Haute    | Page d'erreur    | Retourner à l'accueil                   |
+
+Pour les actions destructives déclenchées par l'utilisateur, appliquer les niveaux de confirmation définis dans `04-patterns.md §6.5`.
 
 ### 5.2 Erreur inline (validation de champ)
 

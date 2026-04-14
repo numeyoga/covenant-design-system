@@ -299,7 +299,17 @@ Les conteneurs limitent la largeur du contenu et le centrent horizontalement. Po
 .container--full { max-width: none; }   /* pleine largeur, padding conservé */
 ```
 
+| Classe | Max-width | Usage |
+|---|---|---|
+| `.container--sm` | 640px | Formulaires courts (< 5 champs), pages de connexion |
+| `.container--md` | 896px | **Formulaires pleine page (référence par défaut)**, pages de détail |
+| `.container--lg` | 1152px | Formulaires multi-colonnes, pages de détail riches |
+| `.container--xl` | 1440px | Dashboards avec conteneur, pages éditoriales larges |
+| `.container--full` | none | Tableaux, dashboards sans contrainte de largeur |
+
 **Règle** : pour les vues de type dashboard, tableau ou liste, ne pas utiliser de conteneur à largeur limitée. Utiliser `.container--full` ou pas de conteneur du tout. Les conteneurs à largeur limitée sont réservés aux formulaires, pages de détails et contenus éditoriaux.
+
+**Largeur des formulaires pleine page** : utiliser `.container--md` (896px) comme largeur de référence pour les formulaires de création/édition. Ne jamais laisser un formulaire s'étendre à la pleine largeur du viewport.
 
 ### 4.3 Container Queries
 
@@ -496,7 +506,7 @@ Les formulaires suivent une grille spécifique plus resserrée :
 .form-layout__actions {
   grid-column: 1 / -1;
   display: flex;
-  justify-content: flex-end;
+  justify-content: flex-start;
   gap: var(--gap-sm);
   padding-top: var(--space-6);
 }
@@ -507,6 +517,33 @@ Les formulaires suivent une grille spécifique plus resserrée :
   }
 }
 ```
+
+### 5.5 Formulaire long — Barre d'actions sticky
+
+Pour les formulaires dont le contenu dépasse la hauteur du viewport, la barre d'actions en bas de page devient sticky afin de rester accessible sans scroll.
+
+```css
+.form-actions-sticky {
+  position: sticky;
+  bottom: 0;
+  z-index: var(--z-sticky);
+
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: var(--gap-sm);
+  padding: var(--padding-md) var(--padding-lg);
+
+  background-color: var(--color-bg-default);
+  border-top: var(--border-width-default) solid var(--color-border-default);
+  box-shadow: 0 -2px 8px rgb(0 0 0 / 0.06);
+}
+```
+
+**Règles** :
+- Utiliser `.form-actions-sticky` uniquement quand le formulaire dépasse 1 viewport de hauteur.
+- L'ordre des boutons est identique à `.form-layout__actions` : `[Action principale] [Annuler]` gauche à droite.
+- La barre remplace (ne duplique pas) les actions de bas de formulaire quand elle est activée. Les actions du Page Header restent présentes.
 
 ---
 
@@ -609,6 +646,7 @@ Pour la lisibilité, les propriétés de layout sont déclarées dans cet ordre 
 | Liste + vue détaillée                      | Master-Detail            | 5.2     |
 | Tableau de bord avec cartes                | Dashboard Grid           | 5.3     |
 | Formulaire à plusieurs champs             | Form Layout              | 5.4     |
+| Formulaire long avec actions persistantes | Barre d'actions sticky   | 5.5     |
 | Contenu en colonnes régulières             | `.grid` + `.col-*`       | 3       |
 | Colonnes qui s'adaptent à l'espace         | `.grid-auto`             | 3.3     |
 | Composant qui s'adapte à son parent        | Container Query          | 4.3     |

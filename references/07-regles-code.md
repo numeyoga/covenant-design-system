@@ -831,6 +831,8 @@ Avant de valider un fichier, vérifier les points suivants :
 - [ ] `:focus-visible` défini pour tout élément interactif
 - [ ] `prefers-reduced-motion` pris en compte si des animations existent
 - [ ] Pas de `!important` sauf dans le reset `prefers-reduced-motion`
+- [ ] `contain: content` déclaré sur l'élément racine de tout composant autonome
+- [ ] Les exceptions à `contain: content` (enfants `fixed`, overflow visible, stacking context complexe) sont documentées en commentaire dans le fichier CSS du composant
 
 ### Fichier JS
 

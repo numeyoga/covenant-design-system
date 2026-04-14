@@ -65,11 +65,26 @@ Sauf mention contraire, les trois tailles suivantes sont disponibles :
 
 **Règle** : une vue ne contient qu'**un seul** bouton `primary`. Les autres actions sont `secondary` ou `ghost`.
 
+**Hiérarchie des actions — règle absolue**
+
+Quatre niveaux d'action sont disponibles :
+
+| Niveau | Variante | Usage |
+|---|---|---|
+| Primaire | `data-variant="primary"` | L'action la plus importante de la section — **une seule par section visible** |
+| Secondaire | `data-variant="secondary"` | Actions importantes mais non prioritaires |
+| Tertiaire | `data-variant="ghost"` | Actions de faible importance, barres d'outils, Annuler |
+| Destructive | `data-variant="danger"` | Actions irréversibles uniquement |
+
+Si aucune action n'est clairement prioritaire, utiliser `secondary` pour toutes plutôt que de promouvoir arbitrairement une en `primary`.
+
 ### 2.3 CSS
 
 ```css
 /* === Base === */
 .btn {
+  contain: content;
+
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -155,6 +170,12 @@ Sauf mention contraire, les trois tailles suivantes sont disponibles :
 }
 
 /* === États === */
+.btn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--color-bg-default),
+              0 0 0 4px var(--color-focus-ring);
+}
+
 .btn:disabled,
 .btn[aria-disabled="true"] {
   opacity: 0.5;
@@ -173,6 +194,8 @@ Sauf mention contraire, les trois tailles suivantes sont disponibles :
   flex-shrink: 0;
 }
 ```
+
+> La technique double anneau (anneau blanc interne + anneau coloré externe) garantit la visibilité du focus sur n'importe quelle couleur de fond, contrairement à un simple `outline`.
 
 ### 2.4 Accessibilité
 
@@ -221,6 +244,8 @@ Sauf mention contraire, les trois tailles suivantes sont disponibles :
 
 ```css
 .input {
+  contain: content;
+
   display: block;
   width: 100%;
   padding: var(--padding-sm) var(--padding-md);
@@ -234,6 +259,8 @@ Sauf mention contraire, les trois tailles suivantes sont disponibles :
   background-color: var(--color-bg-default);
   border: var(--border-width-default) solid var(--color-border-default);
   border-radius: var(--radius-sm);
+
+  box-shadow: inset 0 1px 2px rgb(0 0 0 / 0.05);
 
   transition: border-color var(--duration-fast) var(--ease-default),
               box-shadow var(--duration-fast) var(--ease-default);
@@ -249,8 +276,10 @@ Sauf mention contraire, les trois tailles suivantes sont disponibles :
 
 .input:focus-visible {
   border-color: var(--color-border-focus);
-  outline: 2px solid var(--color-focus-ring);
-  outline-offset: -1px;
+  box-shadow: inset 0 1px 2px rgb(0 0 0 / 0.05),
+              0 0 0 2px var(--color-bg-default),
+              0 0 0 4px var(--color-focus-ring);
+  outline: none;
 }
 
 .input:disabled {
@@ -280,6 +309,8 @@ Sauf mention contraire, les trois tailles suivantes sont disponibles :
   font-size: var(--text-md);
 }
 ```
+
+> L'ombre inset crée un effet de champ encaissé qui distingue visuellement les inputs des boutons et des cartes.
 
 ### 3.3 CSS — Form Field (wrapper)
 
@@ -373,6 +404,8 @@ Sauf mention contraire, les trois tailles suivantes sont disponibles :
 
 ```css
 .textarea {
+  contain: content;
+
   display: block;
   width: 100%;
   padding: var(--padding-sm) var(--padding-md);
@@ -418,6 +451,8 @@ Sauf mention contraire, les trois tailles suivantes sont disponibles :
 
 ```css
 .select-wrapper {
+  contain: content;
+
   position: relative;
   display: inline-flex;
   width: 100%;
@@ -495,6 +530,8 @@ Sauf mention contraire, les trois tailles suivantes sont disponibles :
 ```css
 .checkbox,
 .radio {
+  contain: content;
+
   display: inline-flex;
   align-items: center;
   gap: var(--gap-sm);
@@ -546,6 +583,8 @@ Sauf mention contraire, les trois tailles suivantes sont disponibles :
 
 ```css
 .toggle {
+  contain: content;
+
   display: inline-flex;
   align-items: center;
   gap: var(--gap-sm);
@@ -642,6 +681,8 @@ Sauf mention contraire, les trois tailles suivantes sont disponibles :
 
 ```css
 .card {
+  contain: content;
+
   display: flex;
   flex-direction: column;
 
@@ -748,7 +789,7 @@ Le composant le plus critique pour les applications backoffice. Les tableaux de 
   background-color: var(--color-bg-subtle);
   position: sticky;
   top: 0;
-  z-index: var(--z-base);
+  z-index: var(--z-table-header);
 }
 
 .data-table__th {
@@ -780,6 +821,10 @@ Le composant le plus critique pour les applications backoffice. Les tableaux de 
 }
 
 /* Lignes */
+.data-table__row {
+  contain: content;
+}
+
 .data-table__row:hover {
   background-color: var(--color-bg-subtle);
 }
@@ -827,6 +872,23 @@ Le composant le plus critique pour les applications backoffice. Les tableaux de 
 - La colonne d'actions a un en-tête `<span class="sr-only">Actions</span>`.
 - Les boutons d'action sur chaque ligne ont un `aria-label` qui identifie l'entité (`aria-label="Modifier Alice Martin"`).
 
+**Règles sur les actions de ligne**
+
+- **≤ 3 actions fréquentes** : afficher des boutons icône inline avec tooltip + un menu kebab (⋮) pour les actions supplémentaires.
+- **≥ 4 actions ou tableau dense** : utiliser uniquement le menu kebab — aucun bouton inline.
+- Le menu kebab est placé dans la **dernière colonne, aligné à droite**, sans libellé d'en-tête (remplacé par `<span class="sr-only">Actions</span>`).
+- Dans le menu kebab, les actions destructives sont **les dernières**, séparées par un `<hr class="dropdown__separator">`, avec `data-variant="danger"`.
+- Quand l'action principale d'une ligne est la navigation vers le détail, rendre **la ligne entière cliquable** et supprimer les boutons d'action visibles.
+
+Ajouter `font-variant-numeric: tabular-nums` sur toute colonne contenant des valeurs numériques :
+
+```css
+.data-table__td--numeric {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+```
+
 ---
 
 ## 10. Badge — `.badge`
@@ -845,6 +907,8 @@ Le composant le plus critique pour les applications backoffice. Les tableaux de 
 
 ```css
 .badge {
+  contain: content;
+
   display: inline-flex;
   align-items: center;
   gap: var(--gap-xs);
@@ -907,6 +971,8 @@ Le composant le plus critique pour les applications backoffice. Les tableaux de 
 
 ```css
 .alert {
+  contain: content;
+
   display: flex;
   align-items: flex-start;
   gap: var(--gap-sm);
@@ -994,6 +1060,10 @@ Le composant le plus critique pour les applications backoffice. Les tableaux de 
 ### 12.2 CSS
 
 ```css
+/* Exception CSS Containment : contain: content retiré intentionnellement.
+   Le menu enfant utilise position: absolute/fixed pour se positionner
+   par rapport au viewport. contain: content capturerait ce positionnement.
+   Voir 07-regles-code.md §3.9. */
 .dropdown {
   position: relative;
   display: inline-flex;
@@ -1270,6 +1340,10 @@ export function initTabs(root) {
 ### 14.2 CSS
 
 ```css
+/* Exception CSS Containment : contain: content retiré intentionnellement.
+   Le tooltip déborde intentionnellement du composant déclencheur.
+   contain: content impliquerait overflow: hidden et silencerait ce débordement.
+   Voir 07-regles-code.md §3.9. */
 .tooltip {
   position: absolute;
   z-index: var(--z-tooltip);

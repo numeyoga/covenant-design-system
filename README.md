@@ -34,7 +34,7 @@ Le code applicatif ne contient aucun framework, pré-processeur ou transpileur. 
 01-design-tokens.md     Couleurs, typographie, espacements, ombres, rayons, z-index
 02-layout.md            App Shell, grille, conteneurs, container queries, utilitaires
 03-composants.md        Catalogue des composants (bouton, input, table, dropdown…)
-04-patterns.md          Patterns UI (formulaire, liste, modal, drawer, toast, nav…)
+04-patterns.md          Patterns UI (formulaire, liste, modal, drawer, toast, nav, settings…)
 05-etats-feedback.md    États de chargement, erreur, succès, vide, désactivation
 06-iconographie.md      Système Lucide SVG, conventions d'intégration
 07-regles-code.md       Conventions HTML/CSS/JS, BEM, nommage, structure de fichiers
