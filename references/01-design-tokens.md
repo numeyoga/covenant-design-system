@@ -17,6 +17,8 @@ Les design tokens sont les **valeurs atomiques** du design system. Ils sont impl
 
 ## 2. Couleurs
 
+> **Principe — Gris teintés** : les tokens primitifs de la gamme neutre ne sont pas des gris purs (sans saturation). Chaque niveau porte une légère teinte dans la direction de la couleur primaire du système. Sur la palette actuelle (primaire bleu, hue ≈ 220), les neutres utilisent une saturation de 8–14 % pour la même hue. Un remplacement de la couleur primaire par une autre teinte implique de recalibrer la saturation des neutres en conséquence.
+
 ### 2.1 Palette primitive (référence)
 
 Ces tokens définissent la palette brute. Ils ne sont **jamais** utilisés directement dans le code applicatif.
@@ -295,6 +297,16 @@ L'échelle utilise un ratio proche de 1.25 (Major Third) adapté aux besoins d'u
 }
 ```
 
+### 3.7 Règles de hiérarchie typographique
+
+Ces règles complètent l'échelle en §3.3 pour assurer une hiérarchie lisible dans les interfaces denses.
+
+- **Trois niveaux de texte seulement** : `--color-text-default` (contenu principal), `--color-text-subtle` (contenu secondaire), `--color-text-muted` (métadonnées, labels). Ne pas créer de quatrième niveau.
+- **Désaccentuer pour accentuer** : pour mettre en valeur un élément, réduire le poids visuel de tout ce qui l'entoure plutôt qu'augmenter sa taille ou son poids.
+- **Trois graisses maximum** : `--font-weight-regular` (corps), `--font-weight-medium` (labels, navigation), `--font-weight-semibold` (titres, valeurs importantes). Ne pas utiliser `--font-weight-bold` en dehors des titres de page et alertes.
+- **Données numériques tabulaires** : appliquer `font-variant-numeric: tabular-nums` sur toute colonne de tableau contenant des valeurs numériques variables (montants, pourcentages, compteurs). Cela aligne les colonnes sans recourir à une police monospace.
+- **Lettre-espacement et casse** : les labels en uppercase reçoivent systématiquement `letter-spacing: var(--tracking-wide)`. Les titres ≥ `--text-2xl` reçoivent `letter-spacing: var(--tracking-tight)`.
+
 ---
 
 ## 4. Espacement
@@ -361,7 +373,6 @@ Pour les cas d'usage récurrents, des tokens sémantiques encapsulent les valeur
 
 ```css
 :root {
-  --border-width-thin:    1px;
   --border-width-default: 1px;
   --border-width-thick:   2px;
 }
@@ -390,17 +401,23 @@ Les ombres expriment la hiérarchie visuelle par l'élévation. Le système util
 
 ```css
 :root {
-  --shadow-xs:   0 1px 2px 0 rgb(0 0 0 / 0.05);
-  --shadow-sm:   0 1px 3px 0 rgb(0 0 0 / 0.1),
-                 0 1px 2px -1px rgb(0 0 0 / 0.1);
-  --shadow-md:   0 4px 6px -1px rgb(0 0 0 / 0.1),
-                 0 2px 4px -2px rgb(0 0 0 / 0.1);
-  --shadow-lg:   0 10px 15px -3px rgb(0 0 0 / 0.1),
-                 0 4px 6px -4px rgb(0 0 0 / 0.1);
-  --shadow-xl:   0 20px 25px -5px rgb(0 0 0 / 0.1),
-                 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  --shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.08),
+               0 1px 3px 0 rgb(0 0 0 / 0.12);
+
+  --shadow-md: 0 2px 4px -1px rgb(0 0 0 / 0.08),
+               0 4px 6px -1px rgb(0 0 0 / 0.10);
+
+  --shadow-lg: 0 4px 6px -2px rgb(0 0 0 / 0.08),
+               0 10px 15px -3px rgb(0 0 0 / 0.12);
+
+  --shadow-xl: 0 8px 10px -4px rgb(0 0 0 / 0.08),
+               0 20px 25px -5px rgb(0 0 0 / 0.12);
 }
 ```
+
+Chaque token d'ombre combine une **ombre de contact** (petit offset, forte opacité) et une **ombre ambiante** (grand offset, faible opacité), simulant un éclairage réaliste. En thème sombre, l'élévation est exprimée prioritairement par la luminosité du fond (`--color-bg-*`) plutôt que par les ombres.
 
 | Token          | Usage                                        |
 | -------------- | -------------------------------------------- |
@@ -420,14 +437,15 @@ Un système de couches explicite évite les conflits de z-index :
 
 ```css
 :root {
-  --z-base:       0;
-  --z-dropdown:   100;
-  --z-sticky:     200;
-  --z-overlay:    300;
-  --z-modal:      400;
-  --z-popover:    500;
-  --z-toast:      600;
-  --z-tooltip:    700;
+  --z-base:         0;
+  --z-table-header: 1;    /* En-tête sticky de tableau — au-dessus des cellules, sous tout le reste */
+  --z-dropdown:     100;
+  --z-sticky:       200;
+  --z-overlay:      300;
+  --z-modal:        400;
+  --z-popover:      500;
+  --z-toast:        600;
+  --z-tooltip:      700;
 }
 ```
 

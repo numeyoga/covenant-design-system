@@ -130,6 +130,7 @@ Bandeau en haut de chaque vue du Main Content. Il identifie la page, fournit le 
 - La description est optionnelle.
 - Le bouton `primary` (s'il existe) est toujours **à droite** dans le groupe d'actions.
 - Sur desktop compact (< 1280px), les actions passent sous le titre via `flex-wrap`.
+- La zone `.page-header__end` contient au maximum **un bouton `primary`**, placé le plus à droite. Cette convention est systématique dans toutes les applications couvertes par ce design system : titre de page à gauche, action principale en haut à droite, dans le même bandeau horizontal.
 
 ---
 
@@ -287,8 +288,8 @@ Pattern pour les formulaires de création ou d'édition d'une entité. Utilise l
       <h1 class="page-header__title">Créer un utilisateur</h1>
     </div>
     <div class="page-header__end">
-      <button class="btn" data-variant="secondary" type="button" data-js-action="cancel">Annuler</button>
       <button class="btn" data-variant="primary" type="submit" form="user-form">Enregistrer</button>
+      <button class="btn" data-variant="ghost" type="button" data-js-action="cancel">Annuler</button>
     </div>
   </div>
 
@@ -347,8 +348,8 @@ Pattern pour les formulaires de création ou d'édition d'une entité. Utilise l
 
     <!-- Actions de bas de formulaire -->
     <div class="form-layout__actions">
-      <button class="btn" data-variant="secondary" type="button" data-js-action="cancel">Annuler</button>
       <button class="btn" data-variant="primary" type="submit">Enregistrer</button>
+      <button class="btn" data-variant="ghost" type="button" data-js-action="cancel">Annuler</button>
     </div>
   </form>
 </div>
@@ -372,7 +373,10 @@ Pattern pour les formulaires de création ou d'édition d'une entité. Utilise l
 - L'attribut `form="user-form"` sur le bouton submit du Page Header l'associe au formulaire sans qu'il soit à l'intérieur du `<form>`.
 - Les champs sont groupés en sections logiques séparées par `.form-layout__section`.
 - Un champ qui occupe toute la largeur porte `.form-layout__field--full`.
-- Le bouton Annuler est `secondary`, le bouton Enregistrer est `primary`.
+- Le bouton principal (Enregistrer) est `primary`, aligné à **gauche**. Le bouton Annuler est `ghost`, placé à sa droite. Cette convention est l'inverse des modales (voir §6) où les boutons sont alignés à droite avec Annuler en premier.
+- Désactiver le bouton de soumission jusqu'à ce que le formulaire soit modifié (`dirty`). Le réactiver dès qu'une modification est détectée.
+- Implémenter un avertissement `beforeunload` si des modifications non sauvegardées existent et que l'utilisateur tente de quitter la page.
+- Les labels de boutons d'action utilisent le format **verbe + nom** : "Enregistrer l'utilisateur", "Créer le projet" — jamais "OK", "Valider" ou "Oui".
 
 ### 4.6 Validation côté client
 
@@ -554,9 +558,97 @@ Pattern complet pour une page de type "liste d'entités" — le pattern le plus 
 
 - Le compteur total est affiché dans la description du Page Header **et** dans la zone de pagination.
 - La pagination est au format "fenêtre" : pages adjacentes à la page courante + première et dernière page.
-- Si le nombre total d'éléments est ≤ 20 (ou la taille d'une page), la pagination est masquée.
+- Si le nombre total d'éléments est inférieur ou égal à la taille d'une page (valeur par défaut : 20 lignes), la pagination est masquée. La taille de page par défaut est 20 ; les options proposées à l'utilisateur sont 10 / 20 / 50 / 100.
 - La page courante porte `aria-current="page"`.
 - Les boutons Précédent/Suivant sont `disabled` quand on est sur la première/dernière page.
+
+---
+
+### 5.6 Sélection en masse (Bulk Actions)
+
+#### Mécanique de sélection
+
+- La **colonne checkbox** est la première colonne (la plus à gauche), largeur fixe 40–48px.
+- La checkbox d'en-tête contrôle la sélection de la page courante. Quand elle est cochée, afficher une bannière : *"Les 25 éléments de cette page sont sélectionnés. Sélectionner les 342 résultats ?"*
+- État indéterminé (`indeterminate`) sur la checkbox d'en-tête en cas de sélection partielle.
+- Interactions clavier : Shift+clic pour une plage, Cmd/Ctrl+clic pour basculer un élément, Echap pour tout désélectionner.
+- Les lignes sélectionnées reçoivent `aria-selected="true"` et un fond coloré via `background-color: var(--color-primary-subtle)`.
+
+#### Barre d'actions flottante
+
+Les actions en masse s'affichent dans une **barre fixe en bas de l'écran**, pas dans la toolbar (qui reste visible).
+
+```html
+<div class="bulk-action-bar" role="toolbar" aria-label="Actions sur la sélection" hidden
+     data-js-bulk-bar>
+  <span class="bulk-action-bar__count" data-js-bulk-count>0 sélectionné(s)</span>
+  <div class="bulk-action-bar__actions">
+    <button class="btn" data-variant="secondary" data-size="sm" type="button">Exporter</button>
+    <button class="btn" data-variant="secondary" data-size="sm" type="button">Assigner</button>
+    <button class="btn" data-variant="danger" data-size="sm" type="button">Supprimer</button>
+  </div>
+  <button class="btn" data-variant="ghost" data-size="sm" type="button"
+          aria-label="Désélectionner tout" data-js-bulk-clear>
+    <svg class="btn__icon" aria-hidden="true"><!-- icon-x --></svg>
+  </button>
+</div>
+```
+
+```css
+.bulk-action-bar {
+  position: fixed;
+  bottom: var(--space-6);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: var(--z-overlay);
+
+  display: flex;
+  align-items: center;
+  gap: var(--gap-md);
+  padding: var(--padding-sm) var(--padding-lg);
+
+  background-color: var(--color-bg-default);
+  border: var(--border-width-default) solid var(--color-border-subtle);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+
+  animation: bulk-bar-enter var(--duration-normal) var(--ease-out);
+}
+
+.bulk-action-bar[hidden] {
+  display: none;
+}
+
+.bulk-action-bar__count {
+  font-size: var(--text-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-default);
+  white-space: nowrap;
+}
+
+.bulk-action-bar__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-sm);
+}
+
+@keyframes bulk-bar-enter {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(var(--space-4));
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+```
+
+**Règles** :
+- La barre apparaît dès le premier élément sélectionné (animation 200ms ease-out).
+- Elle disparaît quand la sélection est vide ou effacée par Echap.
+- Maximum 3–5 actions visibles dans la barre ; les suivantes dans un menu "Plus".
+- Les actions non-destructives s'exécutent immédiatement avec un toast de confirmation. Les actions destructives déclenchent une modale précisant le nombre d'éléments concernés.
 
 ---
 
@@ -678,8 +770,23 @@ export function openModal(dialog) {
 }
 ```
 
-### 6.5 Règles
+### 6.5 Niveaux de confirmation pour les actions destructives
 
+Le niveau de friction de la confirmation est proportionnel à la gravité de l'action :
+
+| Gravité | Pattern | Exemple |
+|---|---|---|
+| Faible (facilement annulable) | Exécuter immédiatement + toast avec bouton "Annuler" (fenêtre de 5–10 s) | Archiver un élément, retirer un label |
+| Moyenne (enregistrement unique) | Modal de confirmation avec bouton `danger` et label spécifique ("Supprimer cet utilisateur") | Supprimer un enregistrement |
+| Haute (cascadant ou irréversible) | Modal avec champ de confirmation — l'utilisateur tape le nom de la ressource pour activer le bouton | Supprimer un projet avec ses données |
+| Critique (financier, sécurité) | Champ de confirmation + ré-authentification (mot de passe ou 2FA) | Transfert de propriété, suppression de compte |
+
+**Placement des actions destructives** :
+- Dans les pages de paramètres : isoler dans une section "Zone de danger" en bas de page, avec bordure rouge.
+- Dans les menus dropdown : toujours en dernier, après un séparateur, avec `data-variant="danger"`.
+- Ne jamais placer un bouton destructif à moins de 100px (CSS) d'un bouton de soumission ou de confirmation.
+
+**Règles générales de la modale** :
 - Toujours utiliser `<dialog>` natif avec `.showModal()`, pas de div + overlay custom.
 - `showModal()` gère automatiquement le `::backdrop`, le piège de focus (_focus trap_) et la fermeture par Escape.
 - Le titre porte un `id` référencé par `aria-labelledby` sur le `<dialog>`.
@@ -1196,7 +1303,224 @@ Navigation principale de l'application, placée dans le Side Nav de l'App Shell.
 
 ---
 
-## 11. Récapitulatif des patterns
+## 11. Page de paramètres (Settings)
+
+### 11.1 Rôle
+
+Pattern pour les pages de configuration applicative comportant plusieurs catégories de paramètres.
+
+### 11.2 Structure
+
+```
+┌──────────────────┬────────────────────────────────────────────┐
+│                  │  Titre de section                          │
+│  Nav latérale    ├────────────────────────────────────────────┤
+│  (catégories)    │  ┌─ Carte : Nom de groupe ───────────────┐ │
+│                  │  │  [Champ 1]                            │ │
+│  Général         │  │  [Champ 2]                            │ │
+│  Sécurité        │  │                        [Enregistrer]  │ │
+│  Notifications   │  └───────────────────────────────────────┘ │
+│  Intégrations    │                                            │
+│                  │  ┌─ Zone de danger ──────────────────────┐ │
+│                  │  │  [Action irréversible]                │ │
+│                  │  └───────────────────────────────────────┘ │
+└──────────────────┴────────────────────────────────────────────┘
+```
+
+### 11.3 Markup
+
+```html
+<div class="settings-layout">
+  <!-- Navigation latérale -->
+  <nav class="settings-nav" aria-label="Navigation des paramètres">
+    <ul class="settings-nav__list">
+      <li>
+        <a class="settings-nav__item" href="#general" aria-current="page">Général</a>
+      </li>
+      <li>
+        <a class="settings-nav__item" href="#security">Sécurité</a>
+      </li>
+    </ul>
+  </nav>
+
+  <!-- Contenu -->
+  <div class="settings-content">
+    <h1 class="settings-content__title">Paramètres généraux</h1>
+
+    <!-- Carte de paramètres -->
+    <section class="settings-card" aria-labelledby="settings-profile-title">
+      <div class="settings-card__header">
+        <h2 class="settings-card__title" id="settings-profile-title">Profil</h2>
+        <p class="settings-card__description">
+          Informations visibles par les autres membres.
+        </p>
+      </div>
+      <div class="settings-card__body">
+        <!-- champs de formulaire -->
+      </div>
+      <div class="settings-card__footer">
+        <button class="btn" data-variant="primary" type="submit"
+                disabled data-js-settings-save>
+          Enregistrer
+        </button>
+      </div>
+    </section>
+
+    <!-- Zone de danger -->
+    <section class="settings-danger-zone" aria-labelledby="danger-zone-title">
+      <h2 class="settings-danger-zone__title" id="danger-zone-title">Zone de danger</h2>
+      <div class="settings-danger-zone__item">
+        <div class="settings-danger-zone__description">
+          <strong>Supprimer ce projet</strong>
+          <p>Cette action est irréversible. Toutes les données associées seront supprimées.</p>
+        </div>
+        <button class="btn" data-variant="danger" type="button" data-js-action="delete-project">
+          Supprimer le projet
+        </button>
+      </div>
+    </section>
+  </div>
+</div>
+```
+
+### 11.4 CSS
+
+```css
+.settings-layout {
+  display: grid;
+  grid-template-columns: 16rem 1fr;
+  gap: var(--gap-xl);
+  align-items: start;
+}
+
+.settings-nav__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-0-5);
+}
+
+.settings-nav__item {
+  display: block;
+  padding: var(--padding-sm) var(--padding-md);
+  font-size: var(--text-sm);
+  color: var(--color-text-subtle);
+  border-radius: var(--radius-sm);
+  transition: background-color var(--duration-fast) var(--ease-default),
+              color var(--duration-fast) var(--ease-default);
+}
+
+.settings-nav__item:hover {
+  background-color: var(--color-bg-subtle);
+  color: var(--color-text-default);
+}
+
+.settings-nav__item[aria-current="page"] {
+  background-color: var(--color-primary-subtle);
+  color: var(--color-primary);
+  font-weight: var(--font-weight-medium);
+}
+
+.settings-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-lg);
+  max-width: 48rem;
+}
+
+.settings-content__title {
+  font-size: var(--text-2xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-default);
+}
+
+/* Carte */
+.settings-card {
+  contain: content;
+
+  border: var(--border-width-default) solid var(--color-border-subtle);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.settings-card__header {
+  padding: var(--padding-lg);
+  border-bottom: var(--border-width-default) solid var(--color-border-subtle);
+}
+
+.settings-card__title {
+  font-size: var(--text-base);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-default);
+}
+
+.settings-card__description {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  margin-top: var(--space-1);
+}
+
+.settings-card__body {
+  padding: var(--padding-lg);
+}
+
+.settings-card__footer {
+  display: flex;
+  justify-content: flex-end;
+  padding: var(--padding-md) var(--padding-lg);
+  border-top: var(--border-width-default) solid var(--color-border-subtle);
+  background-color: var(--color-bg-subtle);
+}
+
+/* Zone de danger */
+.settings-danger-zone {
+  border: var(--border-width-default) solid var(--color-danger);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  margin-top: var(--space-8);
+}
+
+.settings-danger-zone__title {
+  padding: var(--padding-md) var(--padding-lg);
+  font-size: var(--text-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-danger-text);
+  background-color: var(--color-danger-subtle);
+  border-bottom: var(--border-width-default) solid var(--color-danger);
+}
+
+.settings-danger-zone__item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-lg);
+  padding: var(--padding-lg);
+}
+
+.settings-danger-zone__description strong {
+  font-size: var(--text-base);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-default);
+  display: block;
+}
+
+.settings-danger-zone__description p {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  margin-top: var(--space-1);
+}
+```
+
+### 11.5 Règles
+
+- **Sauvegarde explicite par carte** : chaque carte a son propre bouton "Enregistrer", désactivé jusqu'à ce que le formulaire soit modifié.
+- **Ne jamais mélanger** sauvegarde automatique et sauvegarde manuelle dans la même carte.
+- **Auto-save uniquement** pour les toggles isolés à faible risque (notifications, préférences d'affichage).
+- La **zone de danger** est toujours en bas de page, séparée du reste par au moins `--space-8`. Chaque action destructive dans cette zone déclenche le niveau de confirmation approprié (voir §6.5).
+- Implémenter un avertissement `beforeunload` si des modifications non sauvegardées existent.
+
+---
+
+## 12. Récapitulatif des patterns
 
 | Pattern                      | Composants utilisés                          | Section |
 | ---------------------------- | -------------------------------------------- | ------- |
@@ -1204,15 +1528,17 @@ Navigation principale de l'application, placée dans le Side Nav de l'App Shell.
 | Toolbar                      | Input, Button, Dropdown                      | 3       |
 | Formulaire création/édition  | Form Field, Input, Select, Checkbox, Button  | 4       |
 | Liste avec recherche/filtres | Page Header, Toolbar, Data Table, Pagination | 5       |
+| Sélection en masse           | Data Table, Bulk Action Bar, Button          | 5.6     |
 | Modal                        | Dialog (natif), Button                       | 6       |
 | Drawer                       | Dialog (natif), Button                       | 7       |
 | Toast / Notification         | Alert (variante), Button                     | 8       |
 | Empty State                  | Button                                       | 9       |
 | Sidebar Navigation           | Button, Badge                                | 10      |
+| Page de paramètres           | Settings Layout, Settings Card, Button       | 11      |
 
 ---
 
-## 12. Versioning de ce document
+## 13. Versioning de ce document
 
 | Version | Date       | Changement        |
 | ------- | ---------- | ----------------- |
