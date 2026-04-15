@@ -19,12 +19,12 @@ Ce document définit comment l'interface communique son état à l'utilisateur :
 
 Le design system utilise 4 canaux de feedback, classés par niveau d'interruption :
 
-| Canal              | Interruption | Durée        | Usage                                              | Implémentation                                   |
-| ------------------ | ------------ | ------------ | -------------------------------------------------- | ------------------------------------------------ |
-| **Inline**         | Aucune       | Persistant   | Validation de champ, statut d'une ligne de tableau | Texte, icône ou badge directement dans le flux   |
-| **Banner / Alert** | Faible       | Persistant   | Message important sur toute la page ou une section | Composant `.alert` (voir 03-composants §11)      |
-| **Toast**          | Moyenne      | Temporaire   | Confirmation d'action, erreur non bloquante        | Pattern Toast (voir 04-patterns §8)              |
-| **Modal**          | Forte        | Bloquant     | Confirmation destructive, erreur critique          | Pattern Modal (voir 04-patterns §6)              |
+| Canal              | Interruption | Durée      | Usage                                              | Implémentation                                 |
+| ------------------ | ------------ | ---------- | -------------------------------------------------- | ---------------------------------------------- |
+| **Inline**         | Aucune       | Persistant | Validation de champ, statut d'une ligne de tableau | Texte, icône ou badge directement dans le flux |
+| **Banner / Alert** | Faible       | Persistant | Message important sur toute la page ou une section | Composant `.alert` (voir 03-composants §11)    |
+| **Toast**          | Moyenne      | Temporaire | Confirmation d'action, erreur non bloquante        | Pattern Toast (voir 04-patterns §8)            |
+| **Modal**          | Forte        | Bloquant   | Confirmation destructive, erreur critique          | Pattern Modal (voir 04-patterns §6)            |
 
 **Règle de choix** : utiliser le canal avec le **niveau d'interruption le plus bas** capable de transmettre le message.
 
@@ -84,7 +84,9 @@ Affiché quand le contenu principal de la page n'est pas encore disponible.
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 ```
 
@@ -98,7 +100,11 @@ Pour un composant qui charge ses données indépendamment (une carte, un widget 
     <h3 class="card__title">Activité récente</h3>
   </header>
   <div class="card__body">
-    <div class="loading-section" role="status" aria-label="Chargement de l'activité">
+    <div
+      class="loading-section"
+      role="status"
+      aria-label="Chargement de l'activité"
+    >
       <div class="spinner" data-size="sm" aria-hidden="true"></div>
     </div>
   </div>
@@ -157,8 +163,13 @@ Pour les vues où la structure finale est prévisible (listes, tableaux, cartes)
 }
 
 @keyframes skeleton-pulse {
-  0%, 100% { opacity: 1; }
-  50%      { opacity: 0.4; }
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
 }
 ```
 
@@ -167,8 +178,13 @@ Pour les vues où la structure finale est prévisible (listes, tableaux, cartes)
 Un bouton qui déclenche une opération asynchrone affiche un état "en cours" :
 
 ```html
-<button class="btn" data-variant="primary" type="button"
-        aria-disabled="true" data-loading>
+<button
+  class="btn"
+  data-variant="primary"
+  type="button"
+  aria-disabled="true"
+  data-loading
+>
   <div class="spinner" data-size="sm" aria-hidden="true"></div>
   <span class="btn__label">Enregistrement…</span>
 </button>
@@ -190,15 +206,15 @@ Un bouton qui déclenche une opération asynchrone affiche un état "en cours" :
 
 ### 3.6 Quand utiliser quel type de chargement
 
-| Durée estimée | Situation | Type de chargement |
-|---|---|---|
-| < 1 s | Toute situation | Aucun indicateur — un flash de skeleton serait plus perturbant que l'attente |
-| 1–5 s | Page entière non chargée | Loading page (spinner centré + texte) |
-| 1–5 s | Section/widget indépendant dont la structure est connue | Skeleton loading |
-| 1–5 s | Section/widget dont la structure est inconnue | Loading section (spinner) |
-| 1–10 s | Action utilisateur déclenchée par un bouton | Bouton loading (`data-loading`) |
-| > 10 s | Upload, import, traitement par lot | Barre de progression avec pourcentage |
-| Indéfini | Chargement de données supplémentaires (pagination, scroll) | Spinner inline en bas de liste |
+| Durée estimée | Situation                                                  | Type de chargement                                                           |
+| ------------- | ---------------------------------------------------------- | ---------------------------------------------------------------------------- |
+| < 1 s         | Toute situation                                            | Aucun indicateur — un flash de skeleton serait plus perturbant que l'attente |
+| 1–5 s         | Page entière non chargée                                   | Loading page (spinner centré + texte)                                        |
+| 1–5 s         | Section/widget indépendant dont la structure est connue    | Skeleton loading                                                             |
+| 1–5 s         | Section/widget dont la structure est inconnue              | Loading section (spinner)                                                    |
+| 1–10 s        | Action utilisateur déclenchée par un bouton                | Bouton loading (`data-loading`)                                              |
+| > 10 s        | Upload, import, traitement par lot                         | Barre de progression avec pourcentage                                        |
+| Indéfini      | Chargement de données supplémentaires (pagination, scroll) | Spinner inline en bas de liste                                               |
 
 ---
 
@@ -206,13 +222,13 @@ Un bouton qui déclenche une opération asynchrone affiche un état "en cours" :
 
 ### 4.1 Feedback après action
 
-| Action                         | Canal de feedback | Message type                    |
-| ------------------------------ | ----------------- | ------------------------------- |
-| Création d'une entité          | Toast success     | "[Entité] créé(e) avec succès" |
-| Modification sauvegardée       | Toast success     | "Modifications enregistrées"    |
-| Suppression effectuée          | Toast success     | "[Entité] supprimé(e)"         |
-| Export terminé                 | Toast info        | "Export terminé — fichier téléchargé" |
-| Action en masse                | Toast success     | "[N] éléments mis à jour"      |
+| Action                   | Canal de feedback | Message type                          |
+| ------------------------ | ----------------- | ------------------------------------- |
+| Création d'une entité    | Toast success     | "[Entité] créé(e) avec succès"        |
+| Modification sauvegardée | Toast success     | "Modifications enregistrées"          |
+| Suppression effectuée    | Toast success     | "[Entité] supprimé(e)"                |
+| Export terminé           | Toast info        | "Export terminé — fichier téléchargé" |
+| Action en masse          | Toast success     | "[N] éléments mis à jour"             |
 
 ### 4.2 Indicateur de sauvegarde automatique
 
@@ -268,12 +284,22 @@ Pour les actions de faible gravité (archivage, retrait d'un tag), le toast de s
 <div class="toast" data-variant="success" role="status">
   <svg class="toast__icon" aria-hidden="true"><!-- icon-check --></svg>
   <span class="toast__message">Élément archivé.</span>
-  <button class="btn" data-variant="ghost" data-size="sm"
-          type="button" data-js-toast-undo>
+  <button
+    class="btn"
+    data-variant="ghost"
+    data-size="sm"
+    type="button"
+    data-js-toast-undo
+  >
     Annuler
   </button>
-  <button class="btn" data-variant="ghost" data-size="sm"
-          aria-label="Fermer" data-js-toast-close>
+  <button
+    class="btn"
+    data-variant="ghost"
+    data-size="sm"
+    aria-label="Fermer"
+    data-js-toast-close
+  >
     <svg class="btn__icon" aria-hidden="true"><!-- icon-x --></svg>
   </button>
 </div>
@@ -287,15 +313,15 @@ Pour les actions de faible gravité (archivage, retrait d'un tag), le toast de s
 
 ### 5.1 Hiérarchie des erreurs
 
-| Type d'erreur                  | Gravité  | Canal            | Action attendue                         |
-| ------------------------------ | -------- | ---------------- | --------------------------------------- |
-| Validation d'un champ          | Faible   | Inline           | Corriger le champ                       |
-| Validation du formulaire       | Faible   | Inline + Alert   | Corriger les champs signalés            |
-| Erreur réseau (temporaire)     | Moyenne  | Toast danger     | Réessayer automatiquement ou manuellement|
-| Erreur serveur (4xx)           | Moyenne  | Alert danger     | Modifier la requête ou contacter support|
-| Erreur serveur (5xx)           | Haute    | Alert danger     | Réessayer ou contacter support          |
-| Erreur critique (app cassée)   | Critique | Page d'erreur    | Recharger la page                       |
-| Ressource introuvable (404)    | Haute    | Page d'erreur    | Retourner à l'accueil                   |
+| Type d'erreur                | Gravité  | Canal          | Action attendue                           |
+| ---------------------------- | -------- | -------------- | ----------------------------------------- |
+| Validation d'un champ        | Faible   | Inline         | Corriger le champ                         |
+| Validation du formulaire     | Faible   | Inline + Alert | Corriger les champs signalés              |
+| Erreur réseau (temporaire)   | Moyenne  | Toast danger   | Réessayer automatiquement ou manuellement |
+| Erreur serveur (4xx)         | Moyenne  | Alert danger   | Modifier la requête ou contacter support  |
+| Erreur serveur (5xx)         | Haute    | Alert danger   | Réessayer ou contacter support            |
+| Erreur critique (app cassée) | Critique | Page d'erreur  | Recharger la page                         |
+| Ressource introuvable (404)  | Haute    | Page d'erreur  | Retourner à l'accueil                     |
 
 Pour les actions destructives déclenchées par l'utilisateur, appliquer les niveaux de confirmation définis dans `04-patterns.md §6.5`.
 
@@ -304,7 +330,7 @@ Pour les actions destructives déclenchées par l'utilisateur, appliquer les niv
 Défini dans [03-composants.md §3.5](./03-composants.md). Pour rappel :
 
 ```html
-<input class="input" aria-invalid="true" aria-describedby="email-error">
+<input class="input" aria-invalid="true" aria-describedby="email-error" />
 <span class="form-field__error" id="email-error" role="alert">
   L'adresse email est invalide.
 </span>
@@ -420,11 +446,11 @@ Les liens dans le résumé pointent vers les champs en erreur via leur `id`, per
 
 **Pages d'erreur courantes** :
 
-| Code | Titre              | Description                                          | Action                    |
-| ---- | ------------------ | ---------------------------------------------------- | ------------------------- |
-| 404  | Page introuvable   | La page n'existe pas ou a été déplacée               | Retour au tableau de bord |
-| 403  | Accès refusé       | Vous n'avez pas les droits pour accéder à cette page | Retour / Contacter admin  |
-| 500  | Erreur serveur     | Une erreur inattendue s'est produite                 | Réessayer / Contacter support |
+| Code | Titre            | Description                                          | Action                        |
+| ---- | ---------------- | ---------------------------------------------------- | ----------------------------- |
+| 404  | Page introuvable | La page n'existe pas ou a été déplacée               | Retour au tableau de bord     |
+| 403  | Accès refusé     | Vous n'avez pas les droits pour accéder à cette page | Retour / Contacter admin      |
+| 500  | Erreur serveur   | Une erreur inattendue s'est produite                 | Réessayer / Contacter support |
 
 ### 5.5 Erreur réseau / retry
 
@@ -444,7 +470,7 @@ export async function fetchWithRetry(url, options = {}, maxRetries = 3) {
       lastError = error;
       if (attempt < maxRetries - 1) {
         const delay = Math.min(1000 * Math.pow(2, attempt), 10000);
-        await new Promise(resolve => setTimeout(resolve, delay));
+        await new Promise((resolve) => setTimeout(resolve, delay));
       }
     }
   }
@@ -461,12 +487,12 @@ export async function fetchWithRetry(url, options = {}, maxRetries = 3) {
 
 Documenté en détail dans [04-patterns.md §9](./04-patterns.md). Récapitulatif des variantes :
 
-| Situation                                | Icône       | Titre                        | Action                |
-| ---------------------------------------- | ----------- | ---------------------------- | --------------------- |
-| Première utilisation (aucune donnée)     | Illustrative| "Aucun [entité]"             | Bouton Créer          |
-| Recherche sans résultat                  | Recherche   | "Aucun résultat"             | Modifier les filtres  |
-| Filtre trop restrictif                   | Filtre      | "Aucun résultat pour ce filtre" | Réinitialiser filtres |
-| Données supprimées                       | Corbeille   | "Élément supprimé"           | Annuler (si possible) |
+| Situation                            | Icône        | Titre                           | Action                |
+| ------------------------------------ | ------------ | ------------------------------- | --------------------- |
+| Première utilisation (aucune donnée) | Illustrative | "Aucun [entité]"                | Bouton Créer          |
+| Recherche sans résultat              | Recherche    | "Aucun résultat"                | Modifier les filtres  |
+| Filtre trop restrictif               | Filtre       | "Aucun résultat pour ce filtre" | Réinitialiser filtres |
+| Données supprimées                   | Corbeille    | "Élément supprimé"              | Annuler (si possible) |
 
 **Règles** :
 
@@ -521,7 +547,9 @@ Quand des données affichées pourraient ne plus être à jour (rafraîchissemen
 ```html
 <div class="data-table-wrapper" data-stale>
   <!-- Le tableau affiche les dernières données connues avec une opacité réduite -->
-  <table class="data-table">...</table>
+  <table class="data-table">
+    ...
+  </table>
 </div>
 ```
 
@@ -551,7 +579,11 @@ Quand des données affichées pourraient ne plus être à jour (rafraîchissemen
 Un indicateur est affiché en bas de la liste pendant le chargement des éléments suivants :
 
 ```html
-<div class="load-more" role="status" aria-label="Chargement des éléments suivants">
+<div
+  class="load-more"
+  role="status"
+  aria-label="Chargement des éléments suivants"
+>
   <div class="spinner" data-size="sm" aria-hidden="true"></div>
   <span class="load-more__text">Chargement…</span>
 </div>
@@ -574,21 +606,40 @@ Un indicateur est affiché en bas de la liste pendant le chargement des élémen
 
 ## 9. Animations et transitions de feedback
 
+### 9.0 Philosophie
+
+Les animations de feedback obéissent à deux principes complémentaires :
+
+**Proportionnalité.** L'animation est au service du feedback, pas de l'esthétique.
+Une transition sert à signaler un changement d'état, guider l'attention, ou confirmer une action.
+Elle ne sert pas à rendre l'interface "vivante".
+
+**Concentration plutôt que dispersion.** Un seul moment animé bien exécuté — par exemple
+l'apparition coordonnée des éléments d'un écran au premier chargement — produit une meilleure
+qualité perçue que des micro-interactions animées sur chaque composant pris isolément.
+Avant d'ajouter une animation, poser la question : est-ce le bon endroit pour concentrer
+l'attention, ou est-ce une animation de plus qui dilue l'ensemble ?
+
+**Règle opérationnelle** : ne définir qu'un seul "moment fort" par écran.
+Tous les autres changements d'état sont des transitions discrètes via les tokens `--duration-fast`
+ou `--duration-normal`. Si un écran possède plusieurs animations remarquables, c'est un signal
+de sur-animation à corriger.
+
 ### 9.1 Transitions d'état
 
 Les changements d'état visuels sont animés avec les tokens de transition :
 
-| Transition                    | Durée                  | Easing              |
-| ----------------------------- | ---------------------- | ------------------- |
-| Hover (fond, bordure)         | `--duration-fast`      | `--ease-default`    |
-| Focus ring                    | `--duration-fast`      | `--ease-default`    |
-| Ouverture dropdown/popover    | `--duration-normal`    | `--ease-out`        |
-| Ouverture modale              | `--duration-normal`    | `--ease-out`        |
-| Ouverture drawer              | `--duration-slow`      | `--ease-out`        |
-| Fermeture (tous)              | `--duration-fast`      | `--ease-in`         |
-| Toast apparition              | `--duration-normal`    | `--ease-out`        |
-| Skeleton pulse                | 1.5s                   | `ease-in-out`       |
-| Spinner rotation              | `--duration-slower`    | `linear`            |
+| Transition                 | Durée               | Easing           |
+| -------------------------- | ------------------- | ---------------- |
+| Hover (fond, bordure)      | `--duration-fast`   | `--ease-default` |
+| Focus ring                 | `--duration-fast`   | `--ease-default` |
+| Ouverture dropdown/popover | `--duration-normal` | `--ease-out`     |
+| Ouverture modale           | `--duration-normal` | `--ease-out`     |
+| Ouverture drawer           | `--duration-slow`   | `--ease-out`     |
+| Fermeture (tous)           | `--duration-fast`   | `--ease-in`      |
+| Toast apparition           | `--duration-normal` | `--ease-out`     |
+| Skeleton pulse             | 1.5s                | `ease-in-out`    |
+| Spinner rotation           | `--duration-slower` | `linear`         |
 
 ### 9.2 Respect de `prefers-reduced-motion`
 
@@ -628,6 +679,7 @@ Action utilisateur
 
 ## 11. Versioning de ce document
 
-| Version | Date       | Changement        |
-| ------- | ---------- | ----------------- |
-| 0.1     | 2026-03-25 | Création initiale |
+| Version | Date       | Changement                              |
+| ------- | ---------- | --------------------------------------- |
+| 0.1     | 2026-03-25 | Création initiale                       |
+| 0.2     | 2026-04-15 | Ajout §9.0 — Philosophie des animations |

@@ -38,12 +38,12 @@ Ce design system est conçu pour être lu et appliqué aussi bien par un dévelo
 
 ### 2.1 Types d'applications couvertes
 
-| Caractéristique        | Valeur                                              |
-| ---------------------- | --------------------------------------------------- |
-| Type                   | Applications métier, dashboards, SPA backoffice     |
-| Usage                  | Fonctionnel, usage interne/personnel                |
-| Priorité               | Utilisabilité et efficacité > esthétique marketing  |
-| Complexité UI attendue | Moyenne à élevée (tableaux, formulaires, graphiques)|
+| Caractéristique        | Valeur                                               |
+| ---------------------- | ---------------------------------------------------- |
+| Type                   | Applications métier, dashboards, SPA backoffice      |
+| Usage                  | Fonctionnel, usage interne/personnel                 |
+| Priorité               | Utilisabilité et efficacité > esthétique marketing   |
+| Complexité UI attendue | Moyenne à élevée (tableaux, formulaires, graphiques) |
 
 ### 2.2 Ce que le design system ne couvre PAS
 
@@ -65,12 +65,12 @@ Ce design system est conçu pour être lu et appliqué aussi bien par un dévelo
 
 ### 3.1 Stack technologique — Vanilla Web
 
-| Élément      | Choix                          | Justification                                      |
-| ------------ | ------------------------------ | -------------------------------------------------- |
-| Markup       | HTML5 sémantique               | Standard, accessible, durable                      |
-| Styles       | CSS natif (custom properties)  | Pas de dépendance, compatible Baseline             |
-| Logique      | JavaScript vanilla (ES2024+)   | Pas de framework imposé, interopérable             |
-| Référentiel  | Web Platform Baseline 2024     | Garantit le support navigateurs récents            |
+| Élément     | Choix                         | Justification                           |
+| ----------- | ----------------------------- | --------------------------------------- |
+| Markup      | HTML5 sémantique              | Standard, accessible, durable           |
+| Styles      | CSS natif (custom properties) | Pas de dépendance, compatible Baseline  |
+| Logique     | JavaScript vanilla (ES2024+)  | Pas de framework imposé, interopérable  |
+| Référentiel | Web Platform Baseline 2024    | Garantit le support navigateurs récents |
 
 **Principe Vanilla Web** : le code applicatif ne dépend d'aucun framework, pré-processeur ou transpileur en production. Les fichiers HTML, CSS et JS livrés sont directement exécutables par le navigateur. Des outils CLI de développement (linting, vérification de compatibilité) sont autorisés et recommandés, mais ils n'interviennent pas dans le bundle livré.
 
@@ -87,11 +87,11 @@ Le design system cible le niveau **Baseline "Newly Available"** : fonctionnalit�
 
 **Règles d'utilisation des fonctionnalités :**
 
-| Statut Baseline               | Utilisation autorisée                                     |
-| ----------------------------- | --------------------------------------------------------- |
-| Widely Available (≥ 30 mois) | Libre, sans restriction                                   |
-| Newly Available (< 30 mois)  | Libre, sans restriction (c'est notre plancher)            |
-| Limited Availability          | Interdit, sauf exception documentée avec fallback fourni  |
+| Statut Baseline              | Utilisation autorisée                                    |
+| ---------------------------- | -------------------------------------------------------- |
+| Widely Available (≥ 30 mois) | Libre, sans restriction                                  |
+| Newly Available (< 30 mois)  | Libre, sans restriction (c'est notre plancher)           |
+| Limited Availability         | Interdit, sauf exception documentée avec fallback fourni |
 
 **Référence de vérification** : [webstatus.dev](https://webstatus.dev)
 
@@ -107,9 +107,7 @@ Browserslist est le standard pour déclarer les navigateurs cibles. Il est conso
 
 ```json
 {
-  "browserslist": [
-    "baseline newly available with downstream"
-  ]
+  "browserslist": ["baseline newly available with downstream"]
 }
 ```
 
@@ -122,11 +120,14 @@ Stylelint avec le plugin `stylelint-browser-compat` permet de signaler les propr
 ```js
 // stylelint.config.js
 module.exports = {
-  plugins: ['stylelint-browser-compat'],
+  plugins: ["stylelint-browser-compat"],
   rules: {
-    'plugin/browser-compat': [true, {
-      browserslist: ['baseline newly available with downstream'],
-    }],
+    "plugin/browser-compat": [
+      true,
+      {
+        browserslist: ["baseline newly available with downstream"],
+      },
+    ],
   },
 };
 ```
@@ -144,14 +145,17 @@ ESLint dispose aussi d'un support CSS natif avec la règle `use-baseline` (via l
 Pour des besoins ponctuels ou pour construire des outils personnalisés, le package npm `web-features` fournit un accès direct aux données Baseline :
 
 ```js
-import { features } from 'web-features';
+import { features } from "web-features";
 
 // Vérifier le statut Baseline d'une fonctionnalité
-const status = features['container-queries']?.status.baseline;
+const status = features["container-queries"]?.status.baseline;
 // Retourne : "low" (Newly Available), "high" (Widely Available), ou false (Limited)
 
 // Vérifier une clé BCD spécifique (propriété CSS, API JS, etc.)
-const bcdStatus = features['subgrid']?.status.by_compat_key['css.properties.grid-template-columns.subgrid'];
+const bcdStatus =
+  features["subgrid"]?.status.by_compat_key[
+    "css.properties.grid-template-columns.subgrid"
+  ];
 ```
 
 Ce package est utile pour :
@@ -161,29 +165,29 @@ Ce package est utile pour :
 
 #### 3.3.6 Récapitulatif de la chaîne d'outils
 
-| Outil                            | Rôle                              | Impacte le bundle ? |
-| -------------------------------- | --------------------------------- | ------------------- |
-| Browserslist                     | Déclare les navigateurs cibles    | Non                 |
-| Stylelint + browser-compat       | Lint CSS vs Baseline              | Non                 |
-| ESLint + eslint-plugin-compat    | Lint JS API vs Baseline           | Non                 |
-| @eslint/css + use-baseline       | Lint CSS propriétés vs Baseline   | Non                 |
-| `web-features` (npm)             | Vérification programmatique       | Non                 |
-| webstatus.dev                    | Consultation manuelle             | Non                 |
+| Outil                         | Rôle                            | Impacte le bundle ? |
+| ----------------------------- | ------------------------------- | ------------------- |
+| Browserslist                  | Déclare les navigateurs cibles  | Non                 |
+| Stylelint + browser-compat    | Lint CSS vs Baseline            | Non                 |
+| ESLint + eslint-plugin-compat | Lint JS API vs Baseline         | Non                 |
+| @eslint/css + use-baseline    | Lint CSS propriétés vs Baseline | Non                 |
+| `web-features` (npm)          | Vérification programmatique     | Non                 |
+| webstatus.dev                 | Consultation manuelle           | Non                 |
 
 Aucun de ces outils ne modifie, ne transpile ou ne transforme le code source. Ils servent exclusivement de garde-fous pendant le développement.
 
 ### 3.4 Accessibilité
 
-| Critère                  | Exigence                            |
-| ------------------------ | ----------------------------------- |
-| Standard                 | WCAG 2.2 niveau AA                  |
-| Contraste texte          | Ratio ≥ 4.5:1 (texte normal)       |
-| Contraste texte large    | Ratio ≥ 3:1 (≥ 18pt ou 14pt bold)  |
-| Contraste éléments UI    | Ratio ≥ 3:1                         |
-| Navigation clavier       | Tous les éléments interactifs       |
-| Focus visible            | Obligatoire, style défini           |
+| Critère                  | Exigence                                   |
+| ------------------------ | ------------------------------------------ |
+| Standard                 | WCAG 2.2 niveau AA                         |
+| Contraste texte          | Ratio ≥ 4.5:1 (texte normal)               |
+| Contraste texte large    | Ratio ≥ 3:1 (≥ 18pt ou 14pt bold)          |
+| Contraste éléments UI    | Ratio ≥ 3:1                                |
+| Navigation clavier       | Tous les éléments interactifs              |
+| Focus visible            | Obligatoire, style défini                  |
 | Attributs ARIA           | Utilisés quand le HTML natif ne suffit pas |
-| Taille cible interactive | Minimum 24×24 CSS pixels            |
+| Taille cible interactive | Minimum 24×24 CSS pixels                   |
 
 ---
 
@@ -214,34 +218,44 @@ Le CSS est écrit pour le plus grand écran d'abord. Les adaptations pour écran
 
 ```css
 /* Style par défaut = desktop large (viewport ≥ 1440px CSS) */
-.layout { /* ... */ }
+.layout {
+  /* ... */
+}
 
 /* Adaptations descendantes */
-@media (max-width: 1439px) { /* desktop standard */ }
-@media (max-width: 1279px) { /* desktop compact */ }
-@media (max-width: 1023px) { /* tablette */        }
-@media (max-width: 767px)  { /* mobile */           }
+@media (max-width: 1439px) {
+  /* desktop standard */
+}
+@media (max-width: 1279px) {
+  /* desktop compact */
+}
+@media (max-width: 1023px) {
+  /* tablette */
+}
+@media (max-width: 767px) {
+  /* mobile */
+}
 ```
 
 ### 4.3 Breakpoints
 
-| Nom              | Plage CSS           | Variable CSS                  | Cas d'usage principal                          |
-| ---------------- | ------------------- | ----------------------------- | ---------------------------------------------- |
-| Desktop large    | ≥ 1440px            | —                             | Vue par défaut, dashboards complets             |
-| Desktop standard | 1280px – 1439px     | `--bp-desktop: 1439px`        | Desktop sans écran large ou scaling élevé       |
-| Desktop compact  | 1024px – 1279px     | `--bp-desktop-compact: 1279px`| Fenêtre réduite, écran plus petit               |
-| Tablette         | 768px – 1023px      | `--bp-tablet: 1023px`         | Support minimal, layout simplifié               |
-| Mobile           | < 768px             | `--bp-mobile: 767px`          | Usage exceptionnel, support basique             |
+| Nom              | Plage CSS       | Variable CSS                   | Cas d'usage principal                     |
+| ---------------- | --------------- | ------------------------------ | ----------------------------------------- |
+| Desktop large    | ≥ 1440px        | —                              | Vue par défaut, dashboards complets       |
+| Desktop standard | 1280px – 1439px | `--bp-desktop: 1439px`         | Desktop sans écran large ou scaling élevé |
+| Desktop compact  | 1024px – 1279px | `--bp-desktop-compact: 1279px` | Fenêtre réduite, écran plus petit         |
+| Tablette         | 768px – 1023px  | `--bp-tablet: 1023px`          | Support minimal, layout simplifié         |
+| Mobile           | < 768px         | `--bp-mobile: 767px`           | Usage exceptionnel, support basique       |
 
 **Priorité d'effort** : le design est optimisé pour Desktop large et Desktop standard. Desktop compact est un compromis acceptable. Tablette et Mobile sont des filets de sécurité, pas des cibles de conception prioritaires.
 
 ### 4.4 Viewports de référence pour le design et les tests
 
-| Contexte                                | Largeur CSS | Hauteur CSS | Correspondance                        |
-| --------------------------------------- | ----------- | ----------- | ------------------------------------- |
-| **Design principal**                    | 2048px      | 1056px      | Écran 2560×1440 @ scaling 125%        |
-| Test desktop standard                   | 1440px      | 900px       | Écran 1080p ou scaling élevé sur QHD  |
-| Test minimum                            | 1024px      | 768px       | Fenêtre réduite / écran compact       |
+| Contexte              | Largeur CSS | Hauteur CSS | Correspondance                       |
+| --------------------- | ----------- | ----------- | ------------------------------------ |
+| **Design principal**  | 2048px      | 1056px      | Écran 2560×1440 @ scaling 125%       |
+| Test desktop standard | 1440px      | 900px       | Écran 1080p ou scaling élevé sur QHD |
+| Test minimum          | 1024px      | 768px       | Fenêtre réduite / écran compact      |
 
 ---
 
@@ -283,38 +297,47 @@ Ces principes guident toute décision non couverte explicitement par une règle 
 4. **Progressivité** : révéler la complexité progressivement (disclosure, accordéons, onglets).
 5. **Feedback immédiat** : toute action utilisateur doit produire un retour visuel en < 100ms.
 6. **Tolérance à l'erreur** : les actions destructives demandent confirmation. Les erreurs de saisie sont détectées tôt.
+7. **Intentionnalité** : la conformité aux règles garantit la cohérence, pas la qualité perçue.
+   Chaque écran doit faire l'objet d'une décision explicite sur trois points :
+   - sa **hiérarchie visuelle** (qu'est-ce qui attire l'œil en premier, en deuxième ?)
+   - sa **densité** (le niveau d'information affiché est-il justifié par le besoin ?)
+   - son **interaction principale** (quelle est l'action centrale, et est-elle évidente sans effort ?)
+
+   Un écran dont ces trois points n'ont pas été décidés explicitement est un écran générique.
+   La conformité au design system est une condition nécessaire, pas suffisante.
 
 ---
 
 ## 7. Glossaire
 
-| Terme               | Définition dans ce contexte                                                  |
-| -------------------- | ---------------------------------------------------------------------------- |
-| Design token         | Valeur atomique (couleur, taille, espacement) stockée dans une variable CSS  |
-| Composant            | Élément UI réutilisable avec markup, styles et comportement définis          |
-| Pattern              | Combinaison de composants résolvant un problème UX récurrent                 |
-| Baseline             | Ensemble de fonctionnalités web supportées par tous les navigateurs majeurs  |
+| Terme                | Définition dans ce contexte                                                         |
+| -------------------- | ----------------------------------------------------------------------------------- |
+| Design token         | Valeur atomique (couleur, taille, espacement) stockée dans une variable CSS         |
+| Composant            | Élément UI réutilisable avec markup, styles et comportement définis                 |
+| Pattern              | Combinaison de composants résolvant un problème UX récurrent                        |
+| Baseline             | Ensemble de fonctionnalités web supportées par tous les navigateurs majeurs         |
 | Newly Available      | Fonctionnalité Baseline présente dans tous les navigateurs majeurs depuis < 30 mois |
 | Widely Available     | Fonctionnalité Baseline présente dans tous les navigateurs majeurs depuis ≥ 30 mois |
-| Limited Availability | Fonctionnalité non encore présente dans tous les navigateurs majeurs         |
-| DPR                  | Device Pixel Ratio — rapport entre pixels physiques et pixels CSS            |
-| Viewport CSS         | Surface utilisable par le contenu web, en pixels logiques (CSS)              |
-| Chrome (navigateur)  | Navigateur web de Google, basé sur Chromium                                  |
-| Chrome (UI)          | Éléments d'interface du navigateur (barres, onglets) qui réduisent le viewport |
-| Browserslist         | Outil déclaratif pour spécifier les navigateurs cibles d'un projet           |
-| Breakpoint           | Seuil de largeur d'écran déclenchant un changement de mise en page          |
-| Desktop-first        | Stratégie où le CSS par défaut cible les grands écrans                       |
-| Fallback             | Solution de repli pour navigateurs ne supportant pas une fonctionnalité      |
-| WCAG                 | Web Content Accessibility Guidelines (normes d'accessibilité W3C)           |
-| BCD                  | Browser Compat Data — jeu de données MDN sur la compatibilité navigateurs   |
-| `web-features`       | Package npm fournissant les données Baseline de manière programmatique       |
+| Limited Availability | Fonctionnalité non encore présente dans tous les navigateurs majeurs                |
+| DPR                  | Device Pixel Ratio — rapport entre pixels physiques et pixels CSS                   |
+| Viewport CSS         | Surface utilisable par le contenu web, en pixels logiques (CSS)                     |
+| Chrome (navigateur)  | Navigateur web de Google, basé sur Chromium                                         |
+| Chrome (UI)          | Éléments d'interface du navigateur (barres, onglets) qui réduisent le viewport      |
+| Browserslist         | Outil déclaratif pour spécifier les navigateurs cibles d'un projet                  |
+| Breakpoint           | Seuil de largeur d'écran déclenchant un changement de mise en page                  |
+| Desktop-first        | Stratégie où le CSS par défaut cible les grands écrans                              |
+| Fallback             | Solution de repli pour navigateurs ne supportant pas une fonctionnalité             |
+| WCAG                 | Web Content Accessibility Guidelines (normes d'accessibilité W3C)                   |
+| BCD                  | Browser Compat Data — jeu de données MDN sur la compatibilité navigateurs           |
+| `web-features`       | Package npm fournissant les données Baseline de manière programmatique              |
 
 ---
 
 ## 8. Versioning de ce document
 
-| Version | Date       | Changement                                                                    |
-| ------- | ---------- | ----------------------------------------------------------------------------- |
-| 0.1     | 2026-03-25 | Création initiale                                                             |
-| 0.2     | 2026-03-25 | Viewport adapté à l'écran 2560×1440, Baseline Newly Available, outillage CLI  |
-| 0.3     | 2026-04-11 | Ajout section Limites                                                         |
+| Version | Date       | Changement                                                                   |
+| ------- | ---------- | ---------------------------------------------------------------------------- |
+| 0.1     | 2026-03-25 | Création initiale                                                            |
+| 0.2     | 2026-03-25 | Viewport adapté à l'écran 2560×1440, Baseline Newly Available, outillage CLI |
+| 0.3     | 2026-04-11 | Ajout section Limites                                                        |
+| 0.4     | 2026-04-15 | Ajout principe 7 — Intentionnalité                                           |
