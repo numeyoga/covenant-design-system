@@ -2,7 +2,7 @@
 
 > Déclinaisons d'App Shell disponibles pour le projet.
 >
-> **Gouvernance :** header et footer statusbar sont **obligatoires** dans toutes les déclinaisons.
+> **Gouvernance :** header et footer sont **obligatoires** dans toutes les déclinaisons.
 > Toute nouvelle déclinaison requiert une raison fonctionnelle documentée et une validation explicite.
 > L'ajout non justifié de déclinaisons est une non-conformité au workflow.
 
@@ -11,6 +11,7 @@
 ## Déclinaison A — Standard
 
 **Structure :**
+
 ```
 ┌─────────────────────────────────────────┐
 │  Header (topbar)                        │
@@ -27,6 +28,7 @@
 **Usage :** écrans de listes, tableaux de bord, vues de détail pleine largeur.
 
 **Zones BEM :**
+
 - `.app-shell` — conteneur racine
 - `.app-shell__header` — topbar fixe
 - `.app-shell__main` — zone de contenu principale, scroll interne
@@ -37,6 +39,7 @@
 ## Déclinaison B — Sidebar
 
 **Structure :**
+
 ```
 ┌─────────────────────────────────────────┐
 │  Header (topbar)                        │
@@ -53,6 +56,7 @@
 **Usage :** applications multi-sections avec navigation latérale persistante.
 
 **Zones BEM :**
+
 - `.app-shell` — conteneur racine
 - `.app-shell__header` — topbar fixe
 - `.app-shell__nav` — sidebar, scroll interne si nécessaire
@@ -60,6 +64,7 @@
 - `.app-shell__footer` — statusbar fixe
 
 **Variantes de la sidebar :**
+
 - Largeur fixe (défaut)
 - Rétractable (`data-collapsed` sur `.app-shell__nav`)
 

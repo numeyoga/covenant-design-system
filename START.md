@@ -9,9 +9,10 @@
 
 Lire les trois fichiers suivants dans cet ordre :
 
-1. `manifest.md` — état global du projet (écrans, versions, phases)
-2. `app-shells.md` — déclinaisons App Shell disponibles
-3. `catalog.md` — registre des composants existants
+1. `WORKFLOW-DESIGN-MAQUETTE.md` - Description du workflow et du format des fichiers
+2. `manifest.md` — état global du projet (écrans, versions, phases)
+3. `app-shells.md` — déclinaisons App Shell disponibles
+4. `catalog.md` — registre des composants existants
 
 ---
 
@@ -42,15 +43,15 @@ Si c'est un nouvel écran → passer directement à la Phase 1 (Brief).
 
 Lire les fichiers DS dans cet ordre :
 
-| Ordre | Fichier | Sections prioritaires |
-|---|---|---|
-| 1 | `design-system/00-fondations.md` | §2 Périmètre, §3 Principes, §4 Responsive |
-| 2 | `design-system/01-design-tokens.md` | Intégral |
-| 3 | `design-system/02-layout.md` | Intégral |
-| 4 | `design-system/03-composants.md` | Selon composants identifiés |
-| 5 | `design-system/04-patterns.md` | Selon patterns identifiés |
-| 6 | `design-system/05-etats-feedback.md` | Intégral |
-| 7 | `design-system/06-iconographie.md` | Intégral |
+| Ordre | Fichier                                         | Sections prioritaires                     |
+| ----- | ----------------------------------------------- | ----------------------------------------- |
+| 1     | `design-system/references/00-fondations.md`     | §2 Périmètre, §3 Principes, §4 Responsive |
+| 2     | `design-system/references/01-design-tokens.md`  | Intégral                                  |
+| 3     | `design-system/references/02-layout.md`         | Intégral                                  |
+| 4     | `design-system/references/03-composants.md`     | Selon composants identifiés               |
+| 5     | `design-system/references/04-patterns.md`       | Selon patterns identifiés                 |
+| 6     | `design-system/references/05-etats-feedback.md` | Intégral                                  |
+| 7     | `design-system/references/06-iconographie.md`   | Intégral                                  |
 
 **Ne pas charger** : `07-regles-code.md`, `08-checklist.md` — hors scope en phase de design.
 
@@ -60,13 +61,13 @@ Lire les fichiers DS dans cet ordre :
 
 Lire `session.md` → champ **"Phase courante"**.
 
-| Phase | Nom | Critère de démarrage |
-|---|---|---|
-| 1 | Brief | Nouvel écran — aucun `brief.md` existant |
-| 2 | Squelette | `brief.md` validé |
-| 3 | Composition | Structure de zones validée |
-| 4 | Finition | Tous les composants placés, données représentatives |
-| 5 | Catalogue | Prototype finalisé et validé |
+| Phase | Nom         | Critère de démarrage                                |
+| ----- | ----------- | --------------------------------------------------- |
+| 1     | Brief       | Nouvel écran — aucun `brief.md` existant            |
+| 2     | Squelette   | `brief.md` validé                                   |
+| 3     | Composition | Structure de zones validée                          |
+| 4     | Finition    | Tous les composants placés, données représentatives |
+| 5     | Catalogue   | Prototype finalisé et validé                        |
 
 En cas de doute → demander confirmation à l'utilisateur.
 
