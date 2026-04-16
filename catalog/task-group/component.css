@@ -1,0 +1,89 @@
+/* ============================================================
+   TASK-GROUP — CSS isolé pour le catalogue vivant
+   Dépend de : task-row/component.css (chargé avant)
+   ============================================================ */
+
+.task-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-sm);
+}
+
+.task-group {
+  background-color: var(--color-bg-default);
+  border: var(--border-width-default) solid var(--color-border-subtle);
+  border-radius: var(--radius-md);
+}
+
+.task-group__header {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-sm);
+  padding: var(--padding-sm) var(--padding-md);
+  background-color: var(--color-bg-subtle);
+  border-bottom: var(--border-width-default) solid var(--color-border-subtle);
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
+}
+
+.task-group__toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.25rem; height: 1.25rem;
+  flex-shrink: 0;
+  color: var(--color-text-muted);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  background: none;
+  border: none;
+  transition: color var(--duration-fast) var(--ease-default);
+}
+.task-group__toggle:hover { color: var(--color-text-default); }
+
+.task-group__chevron {
+  width: 0.875rem; height: 0.875rem;
+  transition: transform var(--duration-fast) var(--ease-default);
+}
+.task-group__toggle[aria-expanded="false"] .task-group__chevron {
+  transform: rotate(-90deg);
+}
+
+.task-group__title {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-sm);
+  flex: 1;
+  font-size: var(--text-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-default);
+}
+.task-group__title--done { color: var(--color-text-muted); }
+
+.task-group__priority-dot {
+  width: 0.5rem; height: 0.5rem;
+  border-radius: var(--radius-full);
+  flex-shrink: 0;
+}
+.task-group__priority-dot[data-priority="high"]   { background-color: var(--color-danger); }
+.task-group__priority-dot[data-priority="normal"] { background-color: var(--color-warning); }
+.task-group__priority-dot[data-priority="low"]    { background-color: var(--color-info); }
+
+.task-group__count {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  font-weight: var(--font-weight-medium);
+  background-color: var(--color-bg-muted);
+  padding: 0 var(--space-2);
+  border-radius: var(--radius-full);
+  min-width: 1.25rem;
+  text-align: center;
+}
+
+.task-group__list {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Groupe replié */
+.task-group__toggle[aria-expanded="false"] + * + .task-group__count,
+.task-group__list[hidden] { display: none; }

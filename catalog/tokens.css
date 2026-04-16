@@ -1,0 +1,153 @@
+/* ============================================================
+   TOKENS DS 0.4 — Partagés entre les catalogues vivants
+   Source : screens/todos/layout.css + components.css
+   ============================================================ */
+
+:root {
+  /* Palette primitive */
+  --palette-neutral-0:    #ffffff;
+  --palette-neutral-50:   #f8f9fa;
+  --palette-neutral-100:  #f1f3f5;
+  --palette-neutral-200:  #e9ecef;
+  --palette-neutral-300:  #dee2e6;
+  --palette-neutral-400:  #ced4da;
+  --palette-neutral-500:  #adb5bd;
+  --palette-neutral-600:  #868e96;
+  --palette-neutral-700:  #495057;
+  --palette-neutral-800:  #343a40;
+  --palette-neutral-900:  #212529;
+  --palette-neutral-950:  #16191d;
+  --palette-primary-50:   #e7f0ff;
+  --palette-primary-400:  #4a8cff;
+  --palette-primary-500:  #2563eb;
+  --palette-primary-600:  #1d4ed8;
+  --palette-primary-700:  #1a3fba;
+  --palette-success-500:  #16a34a;
+  --palette-info-500:     #0891b2;
+  --palette-info-50:      #e6fbfe;
+  --palette-info-700:     #0e7490;
+  --palette-danger-500:   #dc2626;
+  --palette-danger-50:    #fef2f2;
+  --palette-danger-700:   #b91c1c;
+  --palette-warning-500:  #ea8c00;
+  --palette-warning-50:   #fff7e6;
+  --palette-warning-700:  #b36b00;
+
+  /* Tokens sémantiques — couleurs */
+  --color-bg-page:        var(--palette-neutral-50);
+  --color-bg-default:     var(--palette-neutral-0);
+  --color-bg-subtle:      var(--palette-neutral-100);
+  --color-bg-muted:       var(--palette-neutral-200);
+  --color-bg-inverse:     var(--palette-neutral-900);
+  --color-text-default:   var(--palette-neutral-900);
+  --color-text-subtle:    var(--palette-neutral-700);
+  --color-text-muted:     var(--palette-neutral-600);
+  --color-text-inverse:   var(--palette-neutral-0);
+  --color-border-default: var(--palette-neutral-300);
+  --color-border-subtle:  var(--palette-neutral-200);
+  --color-border-strong:  var(--palette-neutral-400);
+  --color-border-focus:   var(--palette-primary-500);
+  --color-primary:        var(--palette-primary-500);
+  --color-primary-hover:  var(--palette-primary-600);
+  --color-primary-active: var(--palette-primary-700);
+  --color-primary-subtle: var(--palette-primary-50);
+  --color-focus-ring:     var(--palette-primary-400);
+  --color-text-on-primary:    var(--palette-neutral-0);
+  --color-text-placeholder:   var(--palette-neutral-500);
+  --color-success:        var(--palette-success-500);
+  --color-success-subtle: #e6f9ed;
+  --color-success-text:   #0d7a36;
+  --color-warning:        var(--palette-warning-500);
+  --color-warning-subtle: var(--palette-warning-50);
+  --color-warning-text:   var(--palette-warning-700);
+  --color-danger:         var(--palette-danger-500);
+  --color-danger-subtle:  var(--palette-danger-50);
+  --color-danger-text:    var(--palette-danger-700);
+  --color-info:           var(--palette-info-500);
+  --color-info-subtle:    var(--palette-info-50);
+  --color-info-text:      var(--palette-info-700);
+
+  /* Typographie */
+  --font-sans:   "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --text-xs:     0.75rem;
+  --text-sm:     0.8125rem;
+  --text-base:   0.875rem;
+  --text-md:     1rem;
+  --text-xl:     1.25rem;
+  --text-2xl:    1.5rem;
+  --font-weight-regular:  400;
+  --font-weight-medium:   500;
+  --font-weight-semibold: 600;
+  --font-weight-bold:     700;
+  --leading-tight:  1.25;
+  --leading-normal: 1.5;
+  --tracking-wide: 0.025em;
+
+  /* Espacement */
+  --space-0-5:  0.125rem;
+  --space-1:    0.25rem;
+  --space-2:    0.5rem;
+  --space-3:    0.75rem;
+  --space-4:    1rem;
+  --space-5:    1.25rem;
+  --space-6:    1.5rem;
+  --space-8:    2rem;
+  --padding-xs: var(--space-1);
+  --padding-sm: var(--space-2);
+  --padding-md: var(--space-3);
+  --padding-lg: var(--space-4);
+  --gap-xs:     var(--space-1);
+  --gap-sm:     var(--space-2);
+  --gap-md:     var(--space-4);
+  --gap-lg:     var(--space-6);
+
+  /* Bordures & rayons */
+  --border-width-default: 1px;
+  --radius-sm:   0.25rem;
+  --radius-md:   0.375rem;
+  --radius-lg:   0.5rem;
+  --radius-full: 9999px;
+
+  /* Ombres */
+  --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-dropdown: 0 8px 16px -4px rgb(0 0 0 / 0.12), 0 4px 6px -2px rgb(0 0 0 / 0.07), 0 0 0 1px rgb(0 0 0 / 0.06);
+
+  /* Animation */
+  --duration-instant: 50ms;
+  --duration-fast:    100ms;
+  --duration-normal:  200ms;
+  --duration-slow:    300ms;
+  --ease-default:     cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-out:         cubic-bezier(0, 0, 0.2, 1);
+
+  /* Z-index */
+  --z-dropdown: 100;
+  --z-sticky:   200;
+  --z-overlay:  300;
+}
+
+/* Reset minimal */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body { height: 100%; }
+
+body {
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  line-height: var(--leading-normal);
+  color: var(--color-text-default);
+  background-color: var(--color-bg-page);
+  -webkit-font-smoothing: antialiased;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

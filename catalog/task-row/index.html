@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Catalogue — task-row</title>
+  <link rel="stylesheet" href="../tokens.css">
+  <link rel="stylesheet" href="./component.css">
+  <link rel="stylesheet" href="../catalog.css">
+</head>
+<body>
+
+<!-- SVG sprite (icônes utilisées par task-row) -->
+<svg style="display:none" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <symbol id="icon-grip" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="12" r="1"/><circle cx="9" cy="5" r="1"/><circle cx="9" cy="19" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="15" cy="5" r="1"/><circle cx="15" cy="19" r="1"/></symbol>
+    <symbol id="icon-calendar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></symbol>
+    <symbol id="icon-chevron-right" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></symbol>
+    <symbol id="icon-chevron-down" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></symbol>
+    <symbol id="icon-more-h" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></symbol>
+    <symbol id="icon-pencil" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></symbol>
+    <symbol id="icon-trash" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></symbol>
+  </defs>
+</svg>
+
+<main class="catalog-page">
+
+  <!-- En-tête -->
+  <header class="catalog-header">
+    <h1 class="catalog-header__title">task-row</h1>
+    <p class="catalog-header__description">
+      Ligne de tâche dans une liste groupée. Affiche le titre, la priorité, les métadonnées
+      (échéance, tags, projet) et les actions contextuelles (visibles au hover). Peut contenir
+      des sous-tâches en ligne.
+    </p>
+    <div class="catalog-header__meta">
+      <span class="badge" data-variant="success">finalisé</span>
+      <span class="badge" data-variant="neutral">todos v0.4</span>
+      <span class="badge" data-variant="neutral">DS 0.4</span>
+    </div>
+  </header>
+
+  <!-- Section : États principaux -->
+  <section class="catalog-section" aria-labelledby="section-states">
+    <h2 class="catalog-section__title" id="section-states">États</h2>
+
+    <div class="catalog-row">
+      <p class="catalog-row__label">default</p>
+      <div class="catalog-preview">
+        <ul>
+          <li class="task-row" data-state="default" data-priority="normal">
+            <button class="task-row__handle btn" data-variant="ghost" data-size="sm" type="button" aria-label="Réordonner" tabindex="-1">
+              <svg class="icon" aria-hidden="true"><use href="#icon-grip"></use></svg>
+            </button>
+            <label class="task-row__check">
+              <input class="checkbox__input" type="checkbox" aria-label="Marquer comme terminée : Tâche par défaut">
+            </label>
+            <span class="task-row__priority-dot" data-priority="normal" aria-hidden="true"></span>
+            <div class="task-row__content">
+              <span class="task-row__title">Tâche en attente — priorité normale</span>
+              <div class="task-row__meta">
+                <span class="badge" data-variant="neutral">client</span>
+                <span class="task-row__due">
+                  <svg class="icon" aria-hidden="true"><use href="#icon-calendar"></use></svg>
+                  <time datetime="2026-04-25">25 avr.</time>
+                </span>
+                <a class="task-row__project" href="#">Atlas</a>
+              </div>
+            </div>
+            <div class="task-row__actions">
+              <button class="btn task-row__menu-btn" data-variant="ghost" data-size="sm" type="button" aria-label="Actions">
+                <svg class="icon" aria-hidden="true"><use href="#icon-more-h"></use></svg>
+              </button>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="catalog-row">
+      <p class="catalog-row__label">data-state="in-progress"</p>
+      <div class="catalog-preview">
+        <ul>
+          <li class="task-row" data-state="in-progress" data-priority="high">
+            <button class="task-row__handle btn" data-variant="ghost" data-size="sm" type="button" aria-label="Réordonner" tabindex="-1">
+              <svg class="icon" aria-hidden="true"><use href="#icon-grip"></use></svg>
+            </button>
+            <label class="task-row__check">
+              <input class="checkbox__input" type="checkbox" aria-label="Marquer comme terminée : Tâche en cours">
+            </label>
+            <span class="task-row__priority-dot" data-priority="high" aria-hidden="true"></span>
+            <div class="task-row__content">
+              <span class="task-row__title">Tâche en cours — titre en couleur primaire</span>
+              <div class="task-row__meta">
+                <span class="badge" data-variant="danger">urgent</span>
+                <span class="task-row__due" data-overdue="true">
+                  <svg class="icon" aria-hidden="true"><use href="#icon-calendar"></use></svg>
+                  <time datetime="2026-04-18">18 avr.</time>
+                </span>
+                <a class="task-row__project" href="#">Marketing Produit</a>
+              </div>
+            </div>
+            <div class="task-row__actions">
+              <button class="btn task-row__menu-btn" data-variant="ghost" data-size="sm" type="button" aria-label="Actions">
+                <svg class="icon" aria-hidden="true"><use href="#icon-more-h"></use></svg>
+              </button>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="catalog-row">
+      <p class="catalog-row__label">data-state="done"</p>
+      <div class="catalog-preview">
+        <ul>
+          <li class="task-row" data-state="done">
+            <button class="task-row__handle btn" data-variant="ghost" data-size="sm" type="button" aria-label="Réordonner" tabindex="-1">
+              <svg class="icon" aria-hidden="true"><use href="#icon-grip"></use></svg>
+            </button>
+            <label class="task-row__check">
+              <input class="checkbox__input" type="checkbox" checked aria-label="Rouvrir : Tâche terminée">
+            </label>
+            <span class="task-row__priority-dot" aria-hidden="true"></span>
+            <div class="task-row__content">
+              <span class="task-row__title">Tâche terminée — barré, opacité réduite</span>
+              <div class="task-row__meta">
+                <span class="badge" data-variant="neutral">client</span>
+                <a class="task-row__project" href="#">Atlas</a>
+              </div>
+            </div>
+            <div class="task-row__actions">
+              <button class="btn task-row__menu-btn" data-variant="ghost" data-size="sm" type="button" aria-label="Actions">
+                <svg class="icon" aria-hidden="true"><use href="#icon-more-h"></use></svg>
+              </button>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- Section : Priorités -->
+  <section class="catalog-section" aria-labelledby="section-priority">
+    <h2 class="catalog-section__title" id="section-priority">Priorités (data-priority)</h2>
+
+    <div class="catalog-preview">
+      <ul>
+        <li class="task-row" data-state="default" data-priority="high">
+          <button class="task-row__handle btn" data-variant="ghost" data-size="sm" type="button" aria-label="Réordonner" tabindex="-1"><svg class="icon" aria-hidden="true"><use href="#icon-grip"></use></svg></button>
+          <label class="task-row__check"><input class="checkbox__input" type="checkbox" aria-label="Marquer : Tâche haute priorité"></label>
+          <span class="task-row__priority-dot" data-priority="high" title="Haute priorité" aria-hidden="true"></span>
+          <div class="task-row__content">
+            <span class="task-row__title">data-priority="high" — point rouge danger</span>
+          </div>
+          <div class="task-row__actions"><button class="btn task-row__menu-btn" data-variant="ghost" data-size="sm" type="button" aria-label="Actions"><svg class="icon" aria-hidden="true"><use href="#icon-more-h"></use></svg></button></div>
+        </li>
+        <li class="task-row" data-state="default" data-priority="normal">
+          <button class="task-row__handle btn" data-variant="ghost" data-size="sm" type="button" aria-label="Réordonner" tabindex="-1"><svg class="icon" aria-hidden="true"><use href="#icon-grip"></use></svg></button>
+          <label class="task-row__check"><input class="checkbox__input" type="checkbox" aria-label="Marquer : Tâche priorité normale"></label>
+          <span class="task-row__priority-dot" data-priority="normal" title="Priorité normale" aria-hidden="true"></span>
+          <div class="task-row__content">
+            <span class="task-row__title">data-priority="normal" — point orange warning</span>
+          </div>
+          <div class="task-row__actions"><button class="btn task-row__menu-btn" data-variant="ghost" data-size="sm" type="button" aria-label="Actions"><svg class="icon" aria-hidden="true"><use href="#icon-more-h"></use></svg></button></div>
+        </li>
+        <li class="task-row" data-state="default" data-priority="low">
+          <button class="task-row__handle btn" data-variant="ghost" data-size="sm" type="button" aria-label="Réordonner" tabindex="-1"><svg class="icon" aria-hidden="true"><use href="#icon-grip"></use></svg></button>
+          <label class="task-row__check"><input class="checkbox__input" type="checkbox" aria-label="Marquer : Tâche basse priorité"></label>
+          <span class="task-row__priority-dot" data-priority="low" title="Basse priorité" aria-hidden="true"></span>
+          <div class="task-row__content">
+            <span class="task-row__title">data-priority="low" — point bleu info</span>
+          </div>
+          <div class="task-row__actions"><button class="btn task-row__menu-btn" data-variant="ghost" data-size="sm" type="button" aria-label="Actions"><svg class="icon" aria-hidden="true"><use href="#icon-more-h"></use></svg></button></div>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Section : Échéance en retard -->
+  <section class="catalog-section" aria-labelledby="section-overdue">
+    <h2 class="catalog-section__title" id="section-overdue">Échéance en retard (data-overdue="true")</h2>
+    <div class="catalog-preview">
+      <ul>
+        <li class="task-row" data-state="default" data-priority="high">
+          <button class="task-row__handle btn" data-variant="ghost" data-size="sm" type="button" aria-label="Réordonner" tabindex="-1"><svg class="icon" aria-hidden="true"><use href="#icon-grip"></use></svg></button>
+          <label class="task-row__check"><input class="checkbox__input" type="checkbox" aria-label="Marquer : Tâche en retard"></label>
+          <span class="task-row__priority-dot" data-priority="high" aria-hidden="true"></span>
+          <div class="task-row__content">
+            <span class="task-row__title">Tâche dont la date est dépassée</span>
+            <div class="task-row__meta">
+              <span class="task-row__due" data-overdue="true">
+                <svg class="icon" aria-hidden="true"><use href="#icon-calendar"></use></svg>
+                <time datetime="2026-04-10">10 avr.</time>
+              </span>
+              <a class="task-row__project" href="#">Marketing Produit</a>
+            </div>
+          </div>
+          <div class="task-row__actions"><button class="btn task-row__menu-btn" data-variant="ghost" data-size="sm" type="button" aria-label="Actions"><svg class="icon" aria-hidden="true"><use href="#icon-more-h"></use></svg></button></div>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Section : Sous-tâches -->
+  <section class="catalog-section" aria-labelledby="section-subtasks">
+    <h2 class="catalog-section__title" id="section-subtasks">Sous-tâches (.task-row__subtasks)</h2>
+    <div class="catalog-preview">
+      <ul>
+        <li class="task-row" data-state="default" data-priority="high">
+          <button class="task-row__handle btn" data-variant="ghost" data-size="sm" type="button" aria-label="Réordonner" tabindex="-1"><svg class="icon" aria-hidden="true"><use href="#icon-grip"></use></svg></button>
+          <label class="task-row__check"><input class="checkbox__input" type="checkbox" aria-label="Marquer : Tâche avec sous-tâches"></label>
+          <span class="task-row__priority-dot" data-priority="high" aria-hidden="true"></span>
+          <div class="task-row__content">
+            <span class="task-row__title">Tâche avec sous-tâches développées</span>
+            <div class="task-row__meta">
+              <span class="task-row__due">
+                <svg class="icon" aria-hidden="true"><use href="#icon-calendar"></use></svg>
+                <time datetime="2026-04-25">25 avr.</time>
+              </span>
+              <button class="task-row__subtasks-btn btn" data-variant="ghost" data-size="sm" type="button" aria-expanded="true">
+                <svg class="icon" aria-hidden="true"><use href="#icon-chevron-down"></use></svg>
+                1 / 2
+              </button>
+            </div>
+            <ul class="task-row__subtasks">
+              <li class="task-subtask" data-state="done">
+                <label class="task-subtask__check">
+                  <input class="checkbox__input" type="checkbox" checked aria-label="Sous-tâche terminée : Première étape">
+                </label>
+                <span class="task-subtask__title">Première étape — terminée</span>
+              </li>
+              <li class="task-subtask" data-state="default">
+                <label class="task-subtask__check">
+                  <input class="checkbox__input" type="checkbox" aria-label="Sous-tâche : Deuxième étape">
+                </label>
+                <span class="task-subtask__title">Deuxième étape — en attente</span>
+              </li>
+            </ul>
+          </div>
+          <div class="task-row__actions"><button class="btn task-row__menu-btn" data-variant="ghost" data-size="sm" type="button" aria-label="Actions"><svg class="icon" aria-hidden="true"><use href="#icon-more-h"></use></svg></button></div>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+</main>
+</body>
+</html>

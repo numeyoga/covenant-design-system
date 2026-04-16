@@ -1,0 +1,215 @@
+/* ============================================================
+   TOKENS DS — inclus directement pour la maquette prototype
+   (en production, importer tokens.css depuis le DS partagé)
+   ============================================================ */
+
+:root {
+  /* Palette primitive */
+  --palette-neutral-0:    #ffffff;
+  --palette-neutral-50:   #f8f9fa;
+  --palette-neutral-100:  #f1f3f5;
+  --palette-neutral-200:  #e9ecef;
+  --palette-neutral-300:  #dee2e6;
+  --palette-neutral-400:  #ced4da;
+  --palette-neutral-500:  #adb5bd;
+  --palette-neutral-600:  #868e96;
+  --palette-neutral-700:  #495057;
+  --palette-neutral-800:  #343a40;
+  --palette-neutral-900:  #212529;
+  --palette-neutral-950:  #16191d;
+  --palette-primary-50:   #e7f0ff;
+  --palette-primary-400:  #4a8cff;
+  --palette-primary-500:  #2563eb;
+  --palette-primary-600:  #1d4ed8;
+  --palette-primary-700:  #1a3fba;
+
+  /* Tokens sémantiques */
+  --color-bg-page:        var(--palette-neutral-50);
+  --color-bg-default:     var(--palette-neutral-0);
+  --color-bg-subtle:      var(--palette-neutral-100);
+  --color-bg-muted:       var(--palette-neutral-200);
+  --color-bg-inverse:     var(--palette-neutral-900);
+  --color-text-default:   var(--palette-neutral-900);
+  --color-text-subtle:    var(--palette-neutral-700);
+  --color-text-muted:     var(--palette-neutral-600);
+  --color-text-inverse:   var(--palette-neutral-0);
+  --color-border-default: var(--palette-neutral-300);
+  --color-border-subtle:  var(--palette-neutral-200);
+  --color-primary:        var(--palette-primary-500);
+  --color-focus-ring:     var(--palette-primary-400);
+
+  /* Typographie */
+  --font-sans:   "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --text-xs:     0.75rem;
+  --text-sm:     0.8125rem;
+  --text-base:   0.875rem;
+  --text-md:     1rem;
+  --text-xl:     1.25rem;
+  --font-weight-regular:  400;
+  --font-weight-medium:   500;
+  --font-weight-semibold: 600;
+  --leading-tight:  1.25;
+  --leading-normal: 1.5;
+
+  /* Espacement */
+  --space-1:   0.25rem;
+  --space-2:   0.5rem;
+  --space-3:   0.75rem;
+  --space-4:   1rem;
+  --space-6:   1.5rem;
+  --space-8:   2rem;
+  --padding-sm: var(--space-2);
+  --padding-md: var(--space-3);
+  --padding-lg: var(--space-4);
+  --gap-xs:    var(--space-1);
+  --gap-sm:    var(--space-2);
+  --gap-md:    var(--space-4);
+  --gap-lg:    var(--space-6);
+
+  /* Bordures & rayons */
+  --border-width-default: 1px;
+  --radius-sm:  0.25rem;
+  --radius-md:  0.375rem;
+  --radius-lg:  0.5rem;
+
+  /* Bordures — rayon plein */
+  --radius-full: 9999px;
+
+  /* Ombres */
+  --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-dropdown: 0 8px 16px -4px rgb(0 0 0 / 0.12), 0 4px 6px -2px rgb(0 0 0 / 0.07), 0 0 0 1px rgb(0 0 0 / 0.06);
+
+  /* Z-index */
+  --z-dropdown: 100;
+  --z-sticky:   200;
+  --z-overlay:  300;
+
+  /* Topbar spécifique (fond sombre) */
+  --color-topbar-hover: color-mix(in srgb, var(--color-bg-inverse) 85%, white);
+  --color-topbar-brand: var(--palette-neutral-0);
+
+  /* App Shell dimensions */
+  --shell-topbar-height:        3rem;
+  --shell-nav-width:            16rem;
+  --shell-nav-width-collapsed:  3.5rem;
+  --shell-statusbar-height:     2rem;
+  --shell-main-padding:         var(--padding-lg);
+}
+
+/* ============================================================
+   RESET MINIMAL
+   ============================================================ */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  line-height: var(--leading-normal);
+  color: var(--color-text-default);
+  background-color: var(--color-bg-page);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ============================================================
+   APP SHELL — Déclinaison B (Sidebar)
+   ============================================================ */
+
+.app-shell {
+  display: grid;
+  grid-template-columns: var(--shell-nav-width) 1fr;
+  grid-template-rows: var(--shell-topbar-height) 1fr var(--shell-statusbar-height);
+  grid-template-areas:
+    "topbar  topbar"
+    "sidenav main"
+    "status  status";
+  height: 100dvh;
+  overflow: hidden;
+}
+
+/* Topbar ---------------------------------------------------- */
+.app-shell__topbar {
+  grid-area: topbar;
+  position: sticky;
+  top: 0;
+  z-index: var(--z-sticky);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-inline: var(--padding-lg);
+  background-color: var(--color-bg-inverse);
+  border-bottom: var(--border-width-default) solid var(--color-bg-inverse);
+}
+
+/* Sidenav ---------------------------------------------------- */
+.app-shell__sidenav {
+  grid-area: sidenav;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  overflow-y: auto;
+  background-color: var(--color-bg-subtle);
+  border-right: var(--border-width-default) solid var(--color-border-default);
+}
+
+/* Main ------------------------------------------------------- */
+.app-shell__main {
+  grid-area: main;
+  overflow-y: auto;
+  padding: var(--shell-main-padding);
+  background-color: var(--color-bg-page);
+  min-height: 0;
+}
+
+/* Statusbar -------------------------------------------------- */
+.app-shell__status {
+  grid-area: status;
+  display: flex;
+  align-items: center;
+  padding-inline: var(--padding-lg);
+  background-color: var(--color-bg-subtle);
+  border-top: var(--border-width-default) solid var(--color-border-default);
+}
+
+/* Sidebar collapse ------------------------------------------ */
+.app-shell[data-nav-collapsed] {
+  grid-template-columns: var(--shell-nav-width-collapsed) 1fr;
+}
+
+/* ============================================================
+   PAGE — Structure interne du main content
+   ============================================================ */
+
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-md);
+  height: 100%;
+  min-height: 0;
+}
+
+.page__body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+/* ============================================================
+   RESPONSIVE — Compact desktop (pas nécessaire en Phase 2)
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

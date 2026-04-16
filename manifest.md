@@ -9,7 +9,7 @@
 
 | Écran | Version maquette | Version DS ciblée | Phase courante | Statut |
 |-------|------------------|-------------------|----------------|--------|
-| —     | —                | —                 | —              | —      |
+| todos | 0.4              | DS 0.4            | 5 — Catalogue   | finalisé |
 
 **Statuts possibles :**
 
