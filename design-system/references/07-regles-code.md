@@ -458,18 +458,17 @@ Trois situations interdisent l'utilisation de `contain: content` :
 
 | Situation | Raison | Composants concernés |
 | --- | --- | --- |
-| Le composant a des enfants en `position: fixed` | `contain: content` capture les descendants `fixed` — ils deviennent relatifs au composant, pas au viewport | Dropdown, Tooltip, Popover |
-| Le composant a un overflow visible intentionnel (ex: tooltip ou badge qui déborde) | `contain: content` implique `overflow: hidden` — le débordement est silencieusement coupé | Tooltip, composants avec badge en surimpression |
+| Le composant a des enfants en `position: absolute` ou `position: fixed` | `contain: layout` (inclus dans `contain: content`) établit un nouveau containing block — les descendants `absolute` et `fixed` sont positionnés par rapport au composant, pas à leur ancêtre positionné normal | Dropdown, Tooltip, Popover, tout composant avec un menu flottant |
+| Le composant a un overflow visible intentionnel (ex: tooltip ou badge qui déborde) | `contain: content` implique `contain: paint` → `overflow: hidden` — le débordement est silencieusement coupé | Tooltip, composants avec badge en surimpression |
 | Le composant participe à un stacking context partagé complexe | `contain: content` crée un nouveau stacking context — cela multiplie les contextes et complique le débogage `z-index` | Zones avec overlay imbriqués |
 
-Pour ces cas, utiliser `contain: layout style` (sans `paint`) ou ne pas appliquer `contain` du tout. Documenter l'exception dans le fichier CSS du composant.
+Pour ces cas, utiliser `contain: style` seul ou ne pas appliquer `contain` du tout. Documenter l'exception dans le fichier CSS du composant.
 
 ```css
-/* Exception documentée : contain: content retiré car le dropdown enfant
-   utilise position: fixed pour se positionner par rapport au viewport */
-.select-wrapper {
+/* Exception documentée : contain retiré — contain:layout établit un containing
+   block qui capture les descendants position:absolute (dropdown menu) */
+.task-row {
   /* contain: content; ← retiré intentionnellement */
-  position: relative;
 }
 ```
 
@@ -496,7 +495,7 @@ Pour les composants qui contiennent de longues listes (> 200 items) et qui n'uti
 
 Ces comportements contre-intuitifs s'appliquent dès qu'un ancêtre porte `contain: content` ou `contain: layout` :
 
-1. **Capture de `position: fixed`** : un enfant `position: fixed` est positionné par rapport au composant contenant, pas par rapport au viewport. Symptôme : un dropdown ou une modale "reste collé" à son parent au lieu de s'afficher en surimpression globale.
+1. **Capture de `position: absolute` et `position: fixed`** : un enfant `position: absolute` est positionné par rapport au composant contenant (même si un autre ancêtre positionné est plus proche), et un enfant `position: fixed` est positionné par rapport au composant plutôt qu'au viewport. Symptôme : un dropdown "sort au mauvais endroit" ou une modale "reste collée" à son parent.
 
 2. **Clipping silencieux** : `contain: content` implique `overflow: hidden`. Tout débordement (badge, tooltip, ombre portée très étendue) est coupé sans avertissement.
 
@@ -560,6 +559,75 @@ Ces comportements contre-intuitifs s'appliquent dès qu'un ancêtre porte `conta
 #### Lien avec la checklist
 
 La `08-checklist.md` exige : "aucune fonctionnalité Limited Availability sans fallback documenté". Le fallback doit être implémenté via `@supports` — pas via un polyfill JS ni via une condition commentée.
+
+### 3.11 `overflow: hidden` et composants flottants
+
+`overflow: hidden` sur un container clippe **tout** ce qui dépasse visuellement, y compris les éléments `position: absolute` dont le containing block est un descendant (ex: `.dropdown { position: relative }` à l'intérieur d'un `.card { overflow: hidden }`). L'élément est clippé même s'il est correctement positionné par rapport à son ancêtre direct.
+
+**`overflow: clip` ne résout pas ce problème** : il clippe les descendants positionnés de la même façon qu'`overflow: hidden` (même clip edge visuel), sans le side effect BFC.
+
+**Pattern correct** quand `overflow: hidden` est utilisé pour le `border-radius` des enfants :
+
+```css
+/* ❌ Anti-pattern : overflow:hidden clippe les dropdowns enfants */
+.card {
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+/* ✅ Correct : border-radius sur les éléments concernés directement */
+.card {
+  border-radius: var(--radius-md);
+  /* pas d'overflow:hidden */
+}
+.card__header {
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
+}
+.card__list > :last-child {
+  border-radius: 0 0 var(--radius-md) var(--radius-md);
+}
+```
+
+**Solution moderne — Popover API** : les éléments avec l'attribut `popover` sont rendus dans le **top layer** du navigateur, au-dessus de tout stacking context, `overflow` et `contain`. Ni `overflow: hidden` ni `contain: layout` ne peuvent les clipper.
+
+```html
+<!-- Le menu est dans le top layer — aucun ancêtre ne peut le clipper -->
+<div class="dropdown">
+  <button popovertarget="menu-actions" style="anchor-name: --actions-trigger">
+    Actions
+  </button>
+  <menu id="menu-actions" popover class="dropdown__menu"
+        style="position-anchor: --actions-trigger">
+    <li><button class="dropdown__item">Modifier</button></li>
+  </menu>
+</div>
+```
+
+```css
+.dropdown__menu[popover] {
+  /* Positionnement via CSS Anchor Positioning (Chrome 125+) */
+  position: fixed;
+  position-area: bottom span-right;
+  margin-block-start: var(--space-1);
+  /* Les autres styles (.dropdown__menu) s'appliquent normalement */
+}
+```
+
+**Disponibilité** : Popover API — Baseline 2024 (Chrome 114+, Firefox 125+, Safari 17+). CSS Anchor Positioning — Chrome 125+, Edge 125+ (pas encore cross-browser Baseline, mais disponible sur les navigateurs cibles Chrome/Opera de ce DS).
+
+Utiliser `@supports (anchor-name: --x)` pour le fallback si la cible s'élargit à Firefox/Safari.
+
+### 3.12 HTML natif avant les patterns JS
+
+Le navigateur fournit des comportements interactifs natifs qui éliminent du JS de maintenance et des bugs d'accessibilité. Avant d'implémenter un pattern JS custom, vérifier l'existence d'un équivalent HTML natif :
+
+| Pattern custom | Équivalent HTML natif | Avantage |
+| --- | --- | --- |
+| Modal/dialog JS | `<dialog>` + `showModal()` | Focus trap, Escape, backdrop natifs |
+| Dropdown menu | `<div popover>` + `popovertarget` | Top layer, light-dismiss, Escape natifs |
+| Accordion | `<details>` + `<summary>` | Toggle natif, pas de JS |
+| Tooltip | `<dialog>` ou attribut `title` + `popover` | Top layer, positionnement natif |
+| Progress bar | `<progress>` | Sémantique + rendu natif |
 
 ---
 
@@ -881,3 +949,4 @@ Avant de valider un fichier, vérifier les points suivants :
 | 0.2     | 2026-04-11 | Ajout §3.9 CSS Containment, §3.10 @supports, §4.8 requestIdleCallback      |
 | 0.3     | 2026-04-11 | Ajout `<footer class="app-shell__status">` dans le template HTML de base   |
 | 0.4     | 2026-04-16 | Focus style §3.5 : adoption technique double anneau `box-shadow`           |
+| 0.5     | 2026-04-17 | §3.9 : `contain: layout` capture aussi `position: absolute` (pas seulement `fixed`) — §3.11 : overflow vs flottants + Popover API + CSS Anchor Positioning — §3.12 : HTML natif avant JS |

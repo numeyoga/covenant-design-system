@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Todos — Maquette Phase 4</title>
+  <title>Todos — Maquette v0.4</title>
   <link rel="stylesheet" href="layout.css">
   <link rel="stylesheet" href="components.css">
 </head>
@@ -205,67 +205,90 @@
 
           <div class="toolbar__filters">
 
-            <div class="dropdown" data-js-dropdown>
-              <button class="btn" data-variant="secondary" data-size="sm"
-                      aria-expanded="false" aria-haspopup="true" data-js-dropdown-trigger>
+            <!-- Filtre Priorité — Popover API + CSS Anchor Positioning -->
+            <div class="dropdown">
+              <button class="btn" data-variant="secondary" data-size="sm" type="button"
+                      popovertarget="menu-priority"
+                      style="anchor-name: --anc-priority"
+                      aria-expanded="false" aria-haspopup="menu"
+                      data-js-dropdown-trigger>
                 <svg class="icon" aria-hidden="true"><use href="#icon-flag"></use></svg>
                 Priorité
                 <svg class="icon" aria-hidden="true"><use href="#icon-chevron-down"></use></svg>
               </button>
-              <div class="dropdown__menu" role="menu" hidden>
-                <button class="dropdown__item" role="menuitem">Haute</button>
-                <button class="dropdown__item" role="menuitem">Normale</button>
-                <button class="dropdown__item" role="menuitem">Basse</button>
+              <div class="dropdown__menu" id="menu-priority" popover
+                   style="position-anchor: --anc-priority"
+                   role="menu">
+                <button class="dropdown__item" role="menuitem" type="button">Haute</button>
+                <button class="dropdown__item" role="menuitem" type="button">Normale</button>
+                <button class="dropdown__item" role="menuitem" type="button">Basse</button>
                 <hr class="dropdown__separator">
-                <button class="dropdown__item" role="menuitem">Toutes</button>
+                <button class="dropdown__item" role="menuitem" type="button">Toutes</button>
               </div>
             </div>
 
-            <div class="dropdown" data-js-dropdown>
-              <button class="btn" data-variant="secondary" data-size="sm"
-                      aria-expanded="false" aria-haspopup="true" data-js-dropdown-trigger>
+            <!-- Filtre Statut -->
+            <div class="dropdown">
+              <button class="btn" data-variant="secondary" data-size="sm" type="button"
+                      popovertarget="menu-status"
+                      style="anchor-name: --anc-status"
+                      aria-expanded="false" aria-haspopup="menu"
+                      data-js-dropdown-trigger>
                 Statut
                 <svg class="icon" aria-hidden="true"><use href="#icon-chevron-down"></use></svg>
               </button>
-              <div class="dropdown__menu" role="menu" hidden>
-                <button class="dropdown__item" role="menuitem">À faire</button>
-                <button class="dropdown__item" role="menuitem">En cours</button>
-                <button class="dropdown__item" role="menuitem">Terminé</button>
+              <div class="dropdown__menu" id="menu-status" popover
+                   style="position-anchor: --anc-status"
+                   role="menu">
+                <button class="dropdown__item" role="menuitem" type="button">À faire</button>
+                <button class="dropdown__item" role="menuitem" type="button">En cours</button>
+                <button class="dropdown__item" role="menuitem" type="button">Terminé</button>
                 <hr class="dropdown__separator">
-                <button class="dropdown__item" role="menuitem">Tous</button>
+                <button class="dropdown__item" role="menuitem" type="button">Tous</button>
               </div>
             </div>
 
-            <!-- Filtre tag actif -->
-            <div class="dropdown" data-js-dropdown>
-              <button class="btn" data-variant="primary" data-size="sm"
-                      aria-expanded="false" aria-haspopup="true" data-js-dropdown-trigger>
+            <!-- Filtre Tag — actif, affiché en primary -->
+            <div class="dropdown">
+              <button class="btn" data-variant="primary" data-size="sm" type="button"
+                      popovertarget="menu-tag"
+                      style="anchor-name: --anc-tag"
+                      aria-expanded="false" aria-haspopup="menu"
+                      data-js-dropdown-trigger>
                 <svg class="icon" aria-hidden="true"><use href="#icon-tag"></use></svg>
                 urgent
                 <svg class="icon" aria-hidden="true"><use href="#icon-x"></use></svg>
               </button>
-              <div class="dropdown__menu" role="menu" hidden>
-                <button class="dropdown__item" role="menuitem">urgent</button>
-                <button class="dropdown__item" role="menuitem">client</button>
-                <button class="dropdown__item" role="menuitem">présentation</button>
+              <div class="dropdown__menu" id="menu-tag" popover
+                   style="position-anchor: --anc-tag"
+                   role="menu">
+                <button class="dropdown__item dropdown__item--active" role="menuitem" type="button">urgent</button>
+                <button class="dropdown__item" role="menuitem" type="button">client</button>
+                <button class="dropdown__item" role="menuitem" type="button">présentation</button>
                 <hr class="dropdown__separator">
-                <button class="dropdown__item" role="menuitem">Tous les tags</button>
+                <button class="dropdown__item" role="menuitem" type="button">Tous les tags</button>
               </div>
             </div>
 
-            <div class="dropdown" data-js-dropdown>
-              <button class="btn" data-variant="secondary" data-size="sm"
-                      aria-expanded="false" aria-haspopup="true" data-js-dropdown-trigger>
+            <!-- Filtre Échéance -->
+            <div class="dropdown">
+              <button class="btn" data-variant="secondary" data-size="sm" type="button"
+                      popovertarget="menu-due"
+                      style="anchor-name: --anc-due"
+                      aria-expanded="false" aria-haspopup="menu"
+                      data-js-dropdown-trigger>
                 <svg class="icon" aria-hidden="true"><use href="#icon-calendar"></use></svg>
                 Échéance
                 <svg class="icon" aria-hidden="true"><use href="#icon-chevron-down"></use></svg>
               </button>
-              <div class="dropdown__menu" role="menu" hidden>
-                <button class="dropdown__item" role="menuitem">Aujourd'hui</button>
-                <button class="dropdown__item" role="menuitem">Cette semaine</button>
-                <button class="dropdown__item" role="menuitem">Ce mois</button>
+              <div class="dropdown__menu" id="menu-due" popover
+                   style="position-anchor: --anc-due"
+                   role="menu">
+                <button class="dropdown__item" role="menuitem" type="button">Aujourd'hui</button>
+                <button class="dropdown__item" role="menuitem" type="button">Cette semaine</button>
+                <button class="dropdown__item" role="menuitem" type="button">Ce mois</button>
                 <hr class="dropdown__separator">
-                <button class="dropdown__item" role="menuitem">Toutes</button>
+                <button class="dropdown__item" role="menuitem" type="button">Toutes</button>
               </div>
             </div>
 
@@ -273,20 +296,28 @@
         </div>
 
         <div class="toolbar__end">
-          <div class="dropdown" data-js-dropdown>
-            <button class="btn" data-variant="ghost" data-size="sm"
-                    aria-expanded="false" aria-haspopup="true" data-js-dropdown-trigger>
+
+          <!-- Tri — menu aligné à droite (--end) -->
+          <div class="dropdown">
+            <button class="btn" data-variant="ghost" data-size="sm" type="button"
+                    popovertarget="menu-sort"
+                    style="anchor-name: --anc-sort"
+                    aria-expanded="false" aria-haspopup="menu"
+                    data-js-dropdown-trigger>
               <svg class="icon" aria-hidden="true"><use href="#icon-sort"></use></svg>
               Priorité
               <svg class="icon" aria-hidden="true"><use href="#icon-chevron-down"></use></svg>
             </button>
-            <div class="dropdown__menu dropdown__menu--end" role="menu" hidden>
-              <button class="dropdown__item dropdown__item--active" role="menuitem">Priorité</button>
-              <button class="dropdown__item" role="menuitem">Date d'échéance</button>
-              <button class="dropdown__item" role="menuitem">Titre (A → Z)</button>
-              <button class="dropdown__item" role="menuitem">Ordre manuel</button>
+            <div class="dropdown__menu dropdown__menu--end" id="menu-sort" popover
+                 style="position-anchor: --anc-sort"
+                 role="menu">
+              <button class="dropdown__item dropdown__item--active" role="menuitem" type="button">Priorité</button>
+              <button class="dropdown__item" role="menuitem" type="button">Date d'échéance</button>
+              <button class="dropdown__item" role="menuitem" type="button">Titre (A → Z)</button>
+              <button class="dropdown__item" role="menuitem" type="button">Ordre manuel</button>
             </div>
           </div>
+
           <button class="btn" data-variant="ghost" data-size="sm" type="button"
                   aria-label="Vue groupée" aria-pressed="true">
             <svg class="icon" aria-hidden="true"><use href="#icon-layout-list"></use></svg>
@@ -294,25 +325,21 @@
         </div>
       </div>
 
-      <!-- TASK LIST -->
+      <!-- TASK LIST ───────────────────────────────────────────── -->
       <div class="task-list" role="list" aria-label="Liste des tâches">
 
-        <!-- Groupe : Haute priorité -->
-        <section class="task-group" aria-labelledby="group-high-title">
-          <div class="task-group__header">
-            <button class="task-group__toggle" type="button"
-                    aria-expanded="true" aria-controls="group-high-list"
-                    data-js-group-toggle>
-              <svg class="icon task-group__chevron" aria-hidden="true"><use href="#icon-chevron-down"></use></svg>
-            </button>
+        <!-- Groupe : Haute priorité — <details>/<summary> natif -->
+        <details class="task-group" open aria-labelledby="group-high-title">
+          <summary class="task-group__header">
+            <svg class="icon task-group__chevron" aria-hidden="true"><use href="#icon-chevron-down"></use></svg>
             <h2 class="task-group__title" id="group-high-title">
               <span class="task-group__priority-dot" data-priority="high" aria-hidden="true"></span>
               Haute priorité
             </h2>
             <span class="task-group__count" aria-label="2 tâches">2</span>
-          </div>
+          </summary>
 
-          <ul class="task-group__list" id="group-high-list">
+          <ul class="task-group__list">
 
             <!-- Tâche 1 — en cours, en retard, sous-tâches -->
             <li class="task-row" data-state="in-progress" data-priority="high"
@@ -346,23 +373,28 @@
                 </div>
               </div>
               <div class="task-row__actions">
-                <div class="dropdown" data-js-dropdown>
+                <div class="dropdown">
                   <button class="btn task-row__menu-btn" data-variant="ghost" data-size="sm"
                           type="button" aria-label="Actions : Préparer la présentation budget Q2"
-                          aria-expanded="false" aria-haspopup="true" data-js-dropdown-trigger>
+                          popovertarget="menu-act-1"
+                          style="anchor-name: --anc-act-1"
+                          aria-expanded="false" aria-haspopup="menu"
+                          data-js-dropdown-trigger>
                     <svg class="icon" aria-hidden="true"><use href="#icon-more-h"></use></svg>
                   </button>
-                  <div class="dropdown__menu dropdown__menu--end" role="menu" hidden>
-                    <button class="dropdown__item" role="menuitem">
+                  <div class="dropdown__menu dropdown__menu--end" id="menu-act-1" popover
+                       style="position-anchor: --anc-act-1"
+                       role="menu">
+                    <button class="dropdown__item" role="menuitem" type="button">
                       <svg class="icon" aria-hidden="true"><use href="#icon-pencil"></use></svg>
                       Modifier
                     </button>
-                    <button class="dropdown__item" role="menuitem">
+                    <button class="dropdown__item" role="menuitem" type="button">
                       <svg class="icon" aria-hidden="true"><use href="#icon-copy"></use></svg>
                       Dupliquer
                     </button>
                     <hr class="dropdown__separator">
-                    <button class="dropdown__item" role="menuitem" data-variant="danger">
+                    <button class="dropdown__item" role="menuitem" type="button" data-variant="danger">
                       <svg class="icon" aria-hidden="true"><use href="#icon-trash"></use></svg>
                       Supprimer
                     </button>
@@ -417,23 +449,28 @@
                 </ul>
               </div>
               <div class="task-row__actions">
-                <div class="dropdown" data-js-dropdown>
+                <div class="dropdown">
                   <button class="btn task-row__menu-btn" data-variant="ghost" data-size="sm"
                           type="button" aria-label="Actions : Mettre à jour les dépendances du projet Atlas"
-                          aria-expanded="false" aria-haspopup="true" data-js-dropdown-trigger>
+                          popovertarget="menu-act-2"
+                          style="anchor-name: --anc-act-2"
+                          aria-expanded="false" aria-haspopup="menu"
+                          data-js-dropdown-trigger>
                     <svg class="icon" aria-hidden="true"><use href="#icon-more-h"></use></svg>
                   </button>
-                  <div class="dropdown__menu dropdown__menu--end" role="menu" hidden>
-                    <button class="dropdown__item" role="menuitem">
+                  <div class="dropdown__menu dropdown__menu--end" id="menu-act-2" popover
+                       style="position-anchor: --anc-act-2"
+                       role="menu">
+                    <button class="dropdown__item" role="menuitem" type="button">
                       <svg class="icon" aria-hidden="true"><use href="#icon-pencil"></use></svg>
                       Modifier
                     </button>
-                    <button class="dropdown__item" role="menuitem">
+                    <button class="dropdown__item" role="menuitem" type="button">
                       <svg class="icon" aria-hidden="true"><use href="#icon-copy"></use></svg>
                       Dupliquer
                     </button>
                     <hr class="dropdown__separator">
-                    <button class="dropdown__item" role="menuitem" data-variant="danger">
+                    <button class="dropdown__item" role="menuitem" type="button" data-variant="danger">
                       <svg class="icon" aria-hidden="true"><use href="#icon-trash"></use></svg>
                       Supprimer
                     </button>
@@ -443,24 +480,20 @@
             </li>
 
           </ul>
-        </section>
+        </details>
 
         <!-- Groupe : Priorité normale -->
-        <section class="task-group" aria-labelledby="group-normal-title">
-          <div class="task-group__header">
-            <button class="task-group__toggle" type="button"
-                    aria-expanded="true" aria-controls="group-normal-list"
-                    data-js-group-toggle>
-              <svg class="icon task-group__chevron" aria-hidden="true"><use href="#icon-chevron-down"></use></svg>
-            </button>
+        <details class="task-group" open aria-labelledby="group-normal-title">
+          <summary class="task-group__header">
+            <svg class="icon task-group__chevron" aria-hidden="true"><use href="#icon-chevron-down"></use></svg>
             <h2 class="task-group__title" id="group-normal-title">
               <span class="task-group__priority-dot" data-priority="normal" aria-hidden="true"></span>
               Priorité normale
             </h2>
             <span class="task-group__count" aria-label="2 tâches">2</span>
-          </div>
+          </summary>
 
-          <ul class="task-group__list" id="group-normal-list">
+          <ul class="task-group__list">
 
             <!-- Tâche 3 — normale, à faire -->
             <li class="task-row" data-state="default" data-priority="normal"
@@ -488,23 +521,28 @@
                 </div>
               </div>
               <div class="task-row__actions">
-                <div class="dropdown" data-js-dropdown>
+                <div class="dropdown">
                   <button class="btn task-row__menu-btn" data-variant="ghost" data-size="sm"
                           type="button" aria-label="Actions : Relire le contrat fournisseur Azimuth"
-                          aria-expanded="false" aria-haspopup="true" data-js-dropdown-trigger>
+                          popovertarget="menu-act-3"
+                          style="anchor-name: --anc-act-3"
+                          aria-expanded="false" aria-haspopup="menu"
+                          data-js-dropdown-trigger>
                     <svg class="icon" aria-hidden="true"><use href="#icon-more-h"></use></svg>
                   </button>
-                  <div class="dropdown__menu dropdown__menu--end" role="menu" hidden>
-                    <button class="dropdown__item" role="menuitem">
+                  <div class="dropdown__menu dropdown__menu--end" id="menu-act-3" popover
+                       style="position-anchor: --anc-act-3"
+                       role="menu">
+                    <button class="dropdown__item" role="menuitem" type="button">
                       <svg class="icon" aria-hidden="true"><use href="#icon-pencil"></use></svg>
                       Modifier
                     </button>
-                    <button class="dropdown__item" role="menuitem">
+                    <button class="dropdown__item" role="menuitem" type="button">
                       <svg class="icon" aria-hidden="true"><use href="#icon-copy"></use></svg>
                       Dupliquer
                     </button>
                     <hr class="dropdown__separator">
-                    <button class="dropdown__item" role="menuitem" data-variant="danger">
+                    <button class="dropdown__item" role="menuitem" type="button" data-variant="danger">
                       <svg class="icon" aria-hidden="true"><use href="#icon-trash"></use></svg>
                       Supprimer
                     </button>
@@ -513,7 +551,7 @@
               </div>
             </li>
 
-            <!-- Tâche 4 — basse priorité, à faire -->
+            <!-- Tâche 4 — basse priorité -->
             <li class="task-row" data-state="default" data-priority="low"
                 data-js-draggable role="listitem">
               <button class="task-row__handle btn" data-variant="ghost" data-size="sm"
@@ -539,23 +577,28 @@
                 </div>
               </div>
               <div class="task-row__actions">
-                <div class="dropdown" data-js-dropdown>
+                <div class="dropdown">
                   <button class="btn task-row__menu-btn" data-variant="ghost" data-size="sm"
                           type="button" aria-label="Actions : Préparer les slides du kick-off Q3"
-                          aria-expanded="false" aria-haspopup="true" data-js-dropdown-trigger>
+                          popovertarget="menu-act-4"
+                          style="anchor-name: --anc-act-4"
+                          aria-expanded="false" aria-haspopup="menu"
+                          data-js-dropdown-trigger>
                     <svg class="icon" aria-hidden="true"><use href="#icon-more-h"></use></svg>
                   </button>
-                  <div class="dropdown__menu dropdown__menu--end" role="menu" hidden>
-                    <button class="dropdown__item" role="menuitem">
+                  <div class="dropdown__menu dropdown__menu--end" id="menu-act-4" popover
+                       style="position-anchor: --anc-act-4"
+                       role="menu">
+                    <button class="dropdown__item" role="menuitem" type="button">
                       <svg class="icon" aria-hidden="true"><use href="#icon-pencil"></use></svg>
                       Modifier
                     </button>
-                    <button class="dropdown__item" role="menuitem">
+                    <button class="dropdown__item" role="menuitem" type="button">
                       <svg class="icon" aria-hidden="true"><use href="#icon-copy"></use></svg>
                       Dupliquer
                     </button>
                     <hr class="dropdown__separator">
-                    <button class="dropdown__item" role="menuitem" data-variant="danger">
+                    <button class="dropdown__item" role="menuitem" type="button" data-variant="danger">
                       <svg class="icon" aria-hidden="true"><use href="#icon-trash"></use></svg>
                       Supprimer
                     </button>
@@ -565,23 +608,19 @@
             </li>
 
           </ul>
-        </section>
+        </details>
 
         <!-- Groupe : Terminées -->
-        <section class="task-group task-group--collapsed-preview" aria-labelledby="group-done-title">
-          <div class="task-group__header">
-            <button class="task-group__toggle" type="button"
-                    aria-expanded="true" aria-controls="group-done-list"
-                    data-js-group-toggle>
-              <svg class="icon task-group__chevron" aria-hidden="true"><use href="#icon-chevron-down"></use></svg>
-            </button>
+        <details class="task-group task-group--collapsed-preview" open aria-labelledby="group-done-title">
+          <summary class="task-group__header">
+            <svg class="icon task-group__chevron" aria-hidden="true"><use href="#icon-chevron-down"></use></svg>
             <h2 class="task-group__title task-group__title--done" id="group-done-title">
               Terminées
             </h2>
             <span class="task-group__count" aria-label="12 tâches terminées">12</span>
-          </div>
+          </summary>
 
-          <ul class="task-group__list" id="group-done-list">
+          <ul class="task-group__list">
 
             <!-- Tâche 5 — terminée -->
             <li class="task-row" data-state="done" data-js-draggable role="listitem">
@@ -603,19 +642,24 @@
                 </div>
               </div>
               <div class="task-row__actions">
-                <div class="dropdown" data-js-dropdown>
+                <div class="dropdown">
                   <button class="btn task-row__menu-btn" data-variant="ghost" data-size="sm"
                           type="button" aria-label="Actions : Définir la roadmap produit H2 2026"
-                          aria-expanded="false" aria-haspopup="true" data-js-dropdown-trigger>
+                          popovertarget="menu-act-5"
+                          style="anchor-name: --anc-act-5"
+                          aria-expanded="false" aria-haspopup="menu"
+                          data-js-dropdown-trigger>
                     <svg class="icon" aria-hidden="true"><use href="#icon-more-h"></use></svg>
                   </button>
-                  <div class="dropdown__menu dropdown__menu--end" role="menu" hidden>
-                    <button class="dropdown__item" role="menuitem">
+                  <div class="dropdown__menu dropdown__menu--end" id="menu-act-5" popover
+                       style="position-anchor: --anc-act-5"
+                       role="menu">
+                    <button class="dropdown__item" role="menuitem" type="button">
                       <svg class="icon" aria-hidden="true"><use href="#icon-copy"></use></svg>
                       Dupliquer
                     </button>
                     <hr class="dropdown__separator">
-                    <button class="dropdown__item" role="menuitem" data-variant="danger">
+                    <button class="dropdown__item" role="menuitem" type="button" data-variant="danger">
                       <svg class="icon" aria-hidden="true"><use href="#icon-trash"></use></svg>
                       Supprimer
                     </button>
@@ -625,7 +669,7 @@
             </li>
 
           </ul>
-        </section>
+        </details>
 
       </div>
       <!-- /task-list -->
@@ -650,30 +694,19 @@
 <!-- /app-shell -->
 
 <script type="module">
-  // Dropdowns — prototype preview only
-  function closeAll(except) {
-    document.querySelectorAll('[data-js-dropdown]').forEach(d => {
-      if (d === except) return;
-      const menu = d.querySelector('.dropdown__menu');
-      const trigger = d.querySelector('[data-js-dropdown-trigger]');
-      if (menu) menu.hidden = true;
-      if (trigger) trigger.setAttribute('aria-expanded', 'false');
-    });
-  }
-
-  document.querySelectorAll('[data-js-dropdown-trigger]').forEach(trigger => {
-    trigger.addEventListener('click', e => {
-      e.stopPropagation();
-      const dropdown = trigger.closest('[data-js-dropdown]');
-      const menu = dropdown.querySelector('.dropdown__menu');
-      const isOpen = !menu.hidden;
-      closeAll(isOpen ? null : dropdown);
-      menu.hidden = isOpen;
-      trigger.setAttribute('aria-expanded', String(!isOpen));
+  /* Synchronise aria-expanded avec l'état du popover (Popover API) */
+  document.querySelectorAll('[popover].dropdown__menu').forEach(menu => {
+    menu.addEventListener('toggle', e => {
+      const trigger = document.querySelector(`[popovertarget="${menu.id}"]`);
+      if (trigger) trigger.setAttribute('aria-expanded', e.newState === 'open' ? 'true' : 'false');
     });
   });
 
-  document.addEventListener('click', () => closeAll(null));
+  /* Ferme le menu quand on clique un item */
+  document.addEventListener('click', e => {
+    const item = e.target.closest('.dropdown__item');
+    if (item) item.closest('[popover]')?.hidePopover();
+  });
 </script>
 </body>
 </html>

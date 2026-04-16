@@ -84,6 +84,10 @@
   flex-direction: column;
 }
 
+.task-group__list .task-row:last-child {
+  border-radius: 0 0 var(--radius-md) var(--radius-md);
+}
+
 /* Groupe replié */
 .task-group__toggle[aria-expanded="false"] + * + .task-group__count,
 .task-group__list[hidden] { display: none; }

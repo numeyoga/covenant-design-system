@@ -48,7 +48,9 @@ Générer un sprite SVG qui regroupe toutes les icônes utilisées, puis les ré
 
 ```html
 <!-- Sprite chargé une fois (en haut du body ou dans un fichier externe) -->
-<svg hidden aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+<!-- Note : utiliser style="display:none" et non l'attribut hidden — Chromium
+     ne garantit pas que hidden applique display:none sur les éléments SVG. -->
+<svg style="display:none" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
   <defs>
     <symbol id="icon-search" viewBox="0 0 24 24" fill="none"
             stroke="currentColor" stroke-width="2"
@@ -284,7 +286,7 @@ async function buildSprite() {
     );
   }
 
-  const sprite = `<svg xmlns="http://www.w3.org/2000/svg" hidden aria-hidden="true">\n  <defs>\n${symbols.join('\n')}\n  </defs>\n</svg>`;
+  const sprite = `<svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">\n  <defs>\n${symbols.join('\n')}\n  </defs>\n</svg>`;
 
   await writeFile(OUTPUT, sprite, 'utf-8');
   console.log(`Sprite generated: ${files.length} icons → ${OUTPUT}`);
@@ -308,3 +310,4 @@ Ce script ne produit pas de code en production — il génère un asset statique
 | Version | Date       | Changement        |
 | ------- | ---------- | ----------------- |
 | 0.1     | 2026-03-25 | Création initiale |
+| 0.2     | 2026-04-17 | Sprite : `hidden` → `style="display:none"` (quirk Chromium) |

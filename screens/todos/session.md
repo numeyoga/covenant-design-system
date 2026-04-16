@@ -54,9 +54,20 @@
 - 2026-04-17 — `.task-row[data-state="done"] .task-row__project` : pointer-events none + bg transparent
 - 2026-04-17 — Dropdowns : `--shadow-dropdown`, `--radius-lg`, icônes en muted, chevron animé au clic
 
+## Décisions Phase 5 — Modern Browser
+
+- 2026-04-17 — Dropdowns migrés : Popover API + CSS Anchor Positioning (Chrome 125+)
+  - `popover` attribute sur les menus → rendu top layer, plus de problème overflow/contain
+  - `anchor-name` / `position-anchor` en inline style par instance (maquette)
+  - JS réduit à 9 lignes (toggle event + close on item click)
+- 2026-04-17 — Groupes tâches migrés : `<details open>` + `<summary class="task-group__header">`
+  - Zéro JS pour les toggles de groupe
+  - Chevron animé via `details:not([open])` CSS uniquement
+  - `::marker` / `::-webkit-details-marker` resetés sur `<summary>`
+
 ## Fichiers modifiés cette session
 
-- index.html (Phase 4 — corrections finition)
+- index.html (Phase 4 — corrections finition + Phase 5 — Modern Browser)
 - layout.css (tokens manquants : radius-full, shadow-md, z-dropdown)
-- components.css (violations tokens corrigées, contain ajouté)
-- session.md (mis à jour Phase 4)
+- components.css (violations tokens corrigées, task-group toggle → details CSS)
+- session.md (mis à jour)
