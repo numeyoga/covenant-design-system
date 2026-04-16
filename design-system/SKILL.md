@@ -141,6 +141,20 @@ Read **only** the files relevant to your current task. Always start with the rou
 3. **Full page or new project**: Read `00-fondations.md`, `01-design-tokens.md`, `02-layout.md`, `07-regles-code.md`, then the component/pattern files as needed.
 4. **Code review or audit**: Read `08-checklist.md` and cross-reference with the specific documents for any failing items.
 
+### Composite Task Reference
+
+For common full-page tasks, read these files in priority order:
+
+| Task | Priority files |
+| ---- | -------------- |
+| Full list page (search + filters + table + pagination + bulk) | `02-layout.md` + `03-composants.md §9` + `04-patterns.md §3,§5` + `05-etats-feedback.md §3,§6` |
+| Full create/edit form | `02-layout.md §5.4,§5.5` + `03-composants.md §3–§7` + `04-patterns.md §4` + `05-etats-feedback.md §5` |
+| Dashboard (KPIs + charts + activity feed) | `02-layout.md §5.3` + `03-composants.md §8,§10` + `04-patterns.md §2` + `05-etats-feedback.md §3` |
+| Master-detail page | `02-layout.md §5.2` + `03-composants.md §9` + `04-patterns.md §2,§7` |
+| Settings page | `04-patterns.md §11` + `03-composants.md §2,§6,§7` + `05-etats-feedback.md §4` |
+| Modal with destructive action | `04-patterns.md §6,§6.5` + `03-composants.md §2` |
+| App shell / navigation setup | `02-layout.md §2` + `04-patterns.md §10` + `06-iconographie.md` |
+
 ---
 
 ## File Structure Reference (Quick)

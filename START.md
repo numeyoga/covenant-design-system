@@ -7,7 +7,7 @@
 
 ## 1. Charger les artefacts persistants
 
-Lire les trois fichiers suivants dans cet ordre :
+Lire les quatre fichiers suivants dans cet ordre :
 
 1. `WORKFLOW-DESIGN-MAQUETTE.md` - Description du workflow et du format des fichiers
 2. `manifest.md` — état global du projet (écrans, versions, phases)
@@ -79,7 +79,7 @@ Ces règles s'appliquent à **tous les fichiers produits** sans exception :
 
 - Aucun framework CSS, JS ou WebComponent (Bootstrap, Tailwind, Vue, Lit, etc.)
 - Tokens DS uniquement — aucune valeur brute (`#fff`, `16px`, `200ms`)
-- BEM sur tous les composants dès la Phase 3 (`block__element--modifier`)
+- BEM sur tous les composants dès la Phase 3 — classes `block__element` pour la structure, attributs `data-variant` / `data-size` / `data-*` pour les variantes et états. **Jamais de classes `--modifier` pour les états** (ex : utiliser `data-variant="primary"`, pas `.btn--primary`)
 - `data-js-*` posés comme marqueurs d'intention, **non implémentés** (hors scope design)
 - App Shell : header et footer statusbar **obligatoires** dans toutes les déclinaisons
 - Données statiques **réalistes** — pas de Lorem ipsum, pas de "Item 1 / Item 2"

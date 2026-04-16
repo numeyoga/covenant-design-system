@@ -265,15 +265,19 @@ Le design system est organisé en documents Markdown, chacun couvrant une couche
 
 ```
 design-system/
-├── 00-fondations.md          ← CE DOCUMENT
-├── 01-design-tokens.md       ← Couleurs, typographie, espacements, ombres, rayons
-├── 02-layout.md              ← Grille, conteneurs, mise en page
-├── 03-composants.md          ← Bibliothèque de composants (boutons, inputs, tables...)
-├── 04-patterns.md            ← Patterns UI récurrents (formulaires, navigation, modales...)
-├── 05-etats-feedback.md      ← États (loading, erreur, vide, succès), notifications
-├── 06-iconographie.md        ← Système d'icônes, conventions
-├── 07-regles-code.md         ← Conventions CSS, nommage, structure de fichiers
-└── 08-checklist.md           ← Checklist de conformité pour valider une implémentation
+├── README.md                 ← Description du design system
+├── SKILL.md                  ← Point d'entrée du skill Claude (table de routage)
+├── VERSION.md                ← Version courante du design system
+└── references/
+    ├── 00-fondations.md      ← CE DOCUMENT
+    ├── 01-design-tokens.md   ← Couleurs, typographie, espacements, ombres, rayons
+    ├── 02-layout.md          ← Grille, conteneurs, mise en page
+    ├── 03-composants.md      ← Bibliothèque de composants (boutons, inputs, tables...)
+    ├── 04-patterns.md        ← Patterns UI récurrents (formulaires, navigation, modales...)
+    ├── 05-etats-feedback.md  ← États (loading, erreur, vide, succès), notifications
+    ├── 06-iconographie.md    ← Système d'icônes, conventions
+    ├── 07-regles-code.md     ← Conventions CSS, nommage, structure de fichiers
+    └── 08-checklist.md       ← Checklist de conformité pour valider une implémentation
 ```
 
 ### Ordre de lecture recommandé

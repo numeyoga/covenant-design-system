@@ -169,7 +169,21 @@ Raison : [si non-standard]
 
 ## Version DS ciblée
 
-[x.x]
+[Voir design-system/VERSION.md — actuellement DS 0.4]
+
+## Données exemples
+
+> Ces données seront utilisées dans les maquettes Phase 3 et 4 à la place des placeholders Lorem ipsum.
+> Fournir des exemples réalistes pour chaque type de donnée affiché à l'écran.
+
+| Champ | Exemple réaliste |
+| ----- | ---------------- |
+| [Nom entité principale] | [ex: Alice Martin] |
+| [Date/heure] | [ex: 14 avr. 2026, 09:42] |
+| [Identifiant] | [ex: #INV-2026-0042] |
+| [Statut] | [ex: En cours / Validé / Rejeté] |
+| [Montant/valeur numérique] | [ex: 1 248,50 €] |
+| [Texte long] | [ex: phrase réaliste du domaine, 50–80 caractères] |
 
 ## Design Thinking
 
@@ -244,7 +258,15 @@ un état vide utile, une densité mieux calibrée...
 - Cohérence inter-composants : alignements, espacements, hiérarchie visuelle.
 - Iconographie : Lucide SVG via sprite, tailles conformes DS.
 
-**Critère de sortie :** le prototype ouvert dans le navigateur est visuellement indiscernable d'une maquette Figma. Un développeur peut en déduire l'implémentation sans ambiguïté.
+**Critère de sortie :** les conditions suivantes sont toutes vérifiées avant de passer à la Phase 5 :
+
+- [ ] Aucune valeur brute dans les fichiers CSS (grep `#[0-9a-fA-F]{3,6}` = 0 résultat hors commentaires)
+- [ ] Chaque composant interactif a tous ses états représentés au moins une fois (hover, focus, disabled)
+- [ ] Focus visible sur tous les éléments interactifs (double anneau visible à l'inspection)
+- [ ] La checklist `08-checklist.md` sections 1 à 6 : 0 item non coché applicable
+- [ ] L'App Shell est correctement structuré : topbar + main + statusbar (+ sidenav si déclinaison B)
+- [ ] Aucun Lorem ipsum ni "Item 1 / Item 2" dans les données
+- [ ] Les contrastes WCAG AA sont respectés sur toutes les combinaisons texte/fond visibles
 
 ---
 
@@ -330,59 +352,9 @@ Chaque écran est versionné indépendamment. La version est incrémentée à ch
 
 ## Fichier START.md
 
-À placer à la racine du projet. Instruit l'agent IA en début de chaque session.
+Le protocole de démarrage de session est implémenté dans `START.md` à la racine du projet. Ce fichier est la **source de vérité unique** pour le démarrage d'une session — se référer à lui directement, ne pas dupliquer son contenu ici.
 
-```markdown
-# START — Protocole de démarrage de session
-
-## 1. Charger les artefacts persistants
-
-- `manifest.md`
-- `app-shells.md`
-- `catalog.md`
-
-## 2. Identifier l'écran en cours de travail
-
-Demander à l'utilisateur si non précisé.
-
-## 3. Charger le contexte de l'écran
-
-Si l'écran existe déjà :
-
-- `screens/[nom-ecran]/session.md`
-- `screens/[nom-ecran]/brief.md`
-- `screens/[nom-ecran]/index.html`
-- `screens/[nom-ecran]/layout.css`
-- `screens/[nom-ecran]/components.css`
-
-## 4. Charger le Design System en mode design
-
-Fichiers à charger (dans l'ordre) :
-
-1. `00-fondations.md` (§2–§4)
-2. `01-design-tokens.md`
-3. `02-layout.md`
-4. `03-composants.md`
-5. `04-patterns.md`
-6. `05-etats-feedback.md`
-7. `06-iconographie.md`
-
-Ne pas charger : `07-regles-code.md`, `08-checklist.md` (hors scope design).
-
-## 5. Identifier la phase courante
-
-Lire `session.md` → champ "Phase courante".
-Si c'est un nouvel écran → Phase 1.
-
-## 6. Rappel des contraintes fixes
-
-- Aucun framework CSS/JS/WebComponent.
-- Tokens DS uniquement (pas de valeurs brutes).
-- BEM sur tous les composants dès la Phase 3.
-- `data-js-*` posés comme marqueurs, non implémentés.
-- Header et footer (statusbar) obligatoires dans l'App Shell.
-- Données statiques réalistes (pas de Lorem ipsum).
-```
+> Lire `START.md` en premier dans chaque session de travail.
 
 ---
 

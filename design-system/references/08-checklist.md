@@ -118,8 +118,8 @@ Chaque section correspond à un document du design system. Les items sont formul
 - [ ] Propriétés ordonnées : Layout → Position → Dimensions → Typo → Visuel → Comportement
 - [ ] Chaque composant a son propre fichier dans `css/components/`
 - [ ] Les classes utilitaires ne concernent que le layout et l'espacement (pas de couleurs, typo ou bordures en utilitaires)
-- [ ] `:focus-visible` défini sur tout élément interactif
-- [ ] Aucun `outline: none` sans alternative `:focus-visible`
+- [ ] Focus visible implémenté via technique double anneau (`box-shadow` dans `:focus-visible`) sur tous les éléments interactifs — voir `07-regles-code.md §3.5`
+- [ ] Aucun `outline: none` sans le double anneau `box-shadow` dans `:focus-visible`
 
 ### JavaScript
 
@@ -310,3 +310,4 @@ Au-delà de cette checklist manuelle, les outils CLI suivants doivent passer san
 | 0.1     | 2026-03-25 | Création initiale                                    |
 | 0.2     | 2026-04-11 | Ajout items CSS Containment dans section Performance |
 | 0.3     | 2026-04-11 | Ajout items status bar et scroll containment (§3)    |
+| 0.4     | 2026-04-16 | Focus double anneau cohérent avec 07-regles-code §3.5 |

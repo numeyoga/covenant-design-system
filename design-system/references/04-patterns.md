@@ -4,6 +4,27 @@
 
 Un pattern est une **combinaison de composants et de règles de layout** qui résout un problème UX récurrent. Là où un composant est une brique isolée (un bouton, un input), un pattern décrit comment assembler ces briques pour répondre à un besoin utilisateur concret (un formulaire de création, une recherche filtrée, une confirmation de suppression).
 
+### Navigation rapide — Sections
+
+> Utiliser ces références pour cibler la lecture selon la tâche (voir aussi la table de routage dans `SKILL.md`).
+
+| §    | Pattern                         | Référence SKILL.md                                     |
+| ---- | ------------------------------- | ------------------------------------------------------ |
+| 1    | Principes des patterns          | Toujours applicable                                    |
+| 2    | Page Header                     | "Page headers"                                         |
+| 3    | Toolbar (barre d'outils)        | "Toolbars"                                             |
+| 4    | Formulaire (création / édition) | "Forms (create/edit patterns)"                         |
+| 5    | Liste avec recherche et filtres | "List with search/filters"                             |
+| 5.6  | Sélection en masse / Bulk       | "Sélection en masse, bulk actions"                     |
+| 6    | Modal (dialogue)                | "Modals (dialogs)"                                     |
+| 6.5  | Actions destructives            | "Actions destructives, niveaux de confirmation"        |
+| 7    | Drawer (panneau latéral)        | "Drawers (side panels)"                                |
+| 8    | Toast / Notification            | "Toasts / notifications"                               |
+| 9    | Empty State (état vide)         | "Empty states"                                         |
+| 10   | Sidebar Navigation              | "Sidebar navigation"                                   |
+| 11   | Page de paramètres (Settings)   | "Page de paramètres, settings"                         |
+| 12   | Récapitulatif                   | Référence rapide                                       |
+
 ---
 
 ## 1. Principes des patterns

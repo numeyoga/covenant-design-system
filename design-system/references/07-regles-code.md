@@ -238,21 +238,31 @@ Pour le contenu visible uniquement par les lecteurs d'écran :
 
 ### 3.5 Style de focus
 
-Tous les éléments interactifs doivent avoir un focus visible. Le style de focus est défini globalement :
+Tous les éléments interactifs doivent avoir un focus visible. Le style de focus utilise la **technique du double anneau** : un anneau interne de la couleur du fond (qui crée la séparation visuelle) et un anneau externe de la couleur focus. Cette approche fonctionne sur tous les fonds, y compris colorés.
 
 ```css
 :focus-visible {
-  outline: 2px solid var(--color-focus-ring);
-  outline-offset: 2px;
+  outline: none;
+  box-shadow: 0 0 0 2px var(--color-bg-default),
+              0 0 0 4px var(--color-focus-ring);
 }
 
-/* Supprimer l'outline par défaut au clic (souris) mais garder pour le clavier */
+/* Supprimer le style de focus au clic (souris) mais garder pour le clavier */
 :focus:not(:focus-visible) {
-  outline: none;
+  box-shadow: none;
 }
 ```
 
-**Règle** : ne **jamais** écrire `outline: none` ou `outline: 0` sans fournir un style de focus alternatif via `:focus-visible`.
+**Règle** : ne **jamais** écrire `outline: none` sans fournir ce style de focus double anneau via `:focus-visible`.
+
+**Note sur les fonds colorés** : sur un composant avec fond de couleur (bouton primary, badge), l'anneau interne doit utiliser la couleur de fond du composant plutôt que `--color-bg-default` :
+
+```css
+.btn[data-variant="primary"]:focus-visible {
+  box-shadow: 0 0 0 2px var(--color-primary),
+              0 0 0 4px var(--color-focus-ring);
+}
+```
 
 ### 3.6 Reset CSS
 
@@ -870,3 +880,4 @@ Avant de valider un fichier, vérifier les points suivants :
 | 0.1     | 2026-03-25 | Création initiale                                                           |
 | 0.2     | 2026-04-11 | Ajout §3.9 CSS Containment, §3.10 @supports, §4.8 requestIdleCallback      |
 | 0.3     | 2026-04-11 | Ajout `<footer class="app-shell__status">` dans le template HTML de base   |
+| 0.4     | 2026-04-16 | Focus style §3.5 : adoption technique double anneau `box-shadow`           |

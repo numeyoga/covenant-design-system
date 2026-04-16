@@ -10,35 +10,38 @@ Ce dépôt réunit deux choses distinctes mais couplées : le **Covenant Design 
 
 ```
 .
-├── START.md Protocole de démarrage de session (agent IA)
-├── WORKFLOW-DESIGN-MAQUETTE.md Référence complète du workflow de conception
-├── manifest.md État global du projet (écrans × versions DS)
-├── app-shells.md Déclinaisons App Shell disponibles
-├── catalog.md Registre des composants (états, statuts)
-├── catalog/
-│ └── [composant]/
-│ ├── index.html Catalogue vivant du composant
-│ └── component.css
-├── screens/
-│ └── [nom-ecran]/
-│ ├── brief.md Phase 1 — expression du besoin
-│ ├── session.md Contexte inter-sessions
-│ ├── index.html Prototype itératif
-│ ├── layout.css Styles de mise en page
-│ └── components.css Styles composants de l'écran
+├── CLAUDE.md                    Configuration Claude Code (skill, règles critiques)
+├── START.md                     Protocole de démarrage — session design/maquette
+├── START-IMPLEMENTATION.md      Protocole de démarrage — session implémentation
+├── WORKFLOW-DESIGN-MAQUETTE.md  Référence complète du workflow de conception
+├── manifest.md                  État global du projet (écrans × versions DS)
+├── app-shells.md                Déclinaisons App Shell disponibles
+├── catalog.md                   Registre des composants (états, statuts)
+├── catalog/                     Créé progressivement en Phase 5
+│   └── [composant]/
+│       ├── index.html           Catalogue vivant du composant
+│       └── component.css
+├── screens/                     Créé progressivement en Phase 1
+│   └── [nom-ecran]/
+│       ├── brief.md             Phase 1 — expression du besoin
+│       ├── session.md           Contexte inter-sessions
+│       ├── index.html           Prototype itératif
+│       ├── layout.css           Styles de mise en page
+│       └── components.css       Styles composants de l'écran
 └── design-system/
-├── README.md
-├── SKILL.md Point d'entrée du skill Claude
-└── references/
-├── 00-fondations.md
-├── 01-design-tokens.md
-├── 02-layout.md
-├── 03-composants.md
-├── 04-patterns.md
-├── 05-etats-feedback.md
-├── 06-iconographie.md
-├── 07-regles-code.md
-└── 08-checklist.md
+    ├── README.md
+    ├── SKILL.md                 Point d'entrée du skill Claude (table de routage)
+    ├── VERSION.md               Version courante du DS et changelog
+    └── references/
+        ├── 00-fondations.md
+        ├── 01-design-tokens.md
+        ├── 02-layout.md
+        ├── 03-composants.md
+        ├── 04-patterns.md
+        ├── 05-etats-feedback.md
+        ├── 06-iconographie.md
+        ├── 07-regles-code.md
+        └── 08-checklist.md
 ```
 
 ---

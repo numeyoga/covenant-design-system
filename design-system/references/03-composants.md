@@ -4,6 +4,28 @@
 
 Ce document est le catalogue des composants UI du design system. Chaque composant est défini par son **markup HTML**, son **CSS** (références aux tokens), ses **états**, ses **variantes**, ses **exigences d'accessibilité** et, le cas échéant, son **comportement JavaScript**.
 
+### Navigation rapide — Sections
+
+> Utiliser ces références pour cibler la lecture selon la tâche (voir aussi la table de routage dans `SKILL.md`).
+
+| §  | Composant                       | Classe BEM     | Référence SKILL.md                          |
+| -- | ------------------------------- | -------------- | ------------------------------------------- |
+| 1  | Conventions globales            | —              | Toujours applicable                         |
+| 2  | Button                          | `.btn`         | "Buttons"                                   |
+| 3  | Input / Champs de formulaire    | `.input`       | "Inputs, textarea, select"                  |
+| 4  | Textarea                        | `.textarea`    | "Inputs, textarea, select"                  |
+| 5  | Select                          | `.select`      | "Inputs, textarea, select"                  |
+| 6  | Checkbox et Radio               | `.checkbox`, `.radio` | "Checkbox, radio, toggle"            |
+| 7  | Toggle Switch                   | `.toggle`      | "Checkbox, radio, toggle"                   |
+| 8  | Card                            | `.card`        | "Cards"                                     |
+| 9  | Data Table                      | `.data-table`  | "Data tables"                               |
+| 10 | Badge                           | `.badge`       | "Badges"                                    |
+| 11 | Alert                           | `.alert`       | "Alerts"                                    |
+| 12 | Dropdown / Menu                 | `.dropdown`    | "Dropdowns / menus"                         |
+| 13 | Tabs                            | `.tabs`        | "Tabs"                                      |
+| 14 | Tooltip                         | `.tooltip`     | "Tooltips"                                  |
+| 15 | Récapitulatif                   | —              | Référence rapide                            |
+
 ---
 
 ## 1. Conventions appliquées à tous les composants
@@ -83,6 +105,9 @@ Si aucune action n'est clairement prioritaire, utiliser `secondary` pour toutes 
 ```css
 /* === Base === */
 .btn {
+  /* contain: content isole le composant pour les performances de rendu.
+     Exception : si un badge ou un tooltip déborde visuellement du bouton,
+     retirer contain et utiliser contain: layout style à la place. */
   contain: content;
 
   display: inline-flex;
