@@ -111,6 +111,7 @@ Read **only** the files relevant to your current task. Always start with the rou
 | Dropdowns / menus                                                    | `03-composants.md` §12          |
 | Tabs                                                                 | `03-composants.md` §13          |
 | Tooltips                                                             | `03-composants.md` §14          |
+| Accordion, collapsible sections, `<details>/<summary>`               | `03-composants.md` §15          |
 | Page headers                                                         | `04-patterns.md` §2             |
 | Toolbars                                                             | `04-patterns.md` §3             |
 | Forms (create/edit patterns)                                         | `04-patterns.md` §4             |

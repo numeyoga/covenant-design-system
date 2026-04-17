@@ -26,8 +26,9 @@
   <header class="catalog-header">
     <h1 class="catalog-header__title">task-group</h1>
     <p class="catalog-header__description">
-      Groupe de tâches avec en-tête pliable. Regroupe les <code>task-row</code> par priorité ou par catégorie.
-      L'en-tête affiche un point de couleur de priorité, le titre du groupe et le compteur de tâches.
+      Groupe de tâches avec en-tête pliable natif (<code>&lt;details&gt;/&lt;summary&gt;</code>).
+      Regroupe les <code>task-row</code> par priorité ou par catégorie.
+      Le toggle ouvert/fermé est géré nativement par le navigateur — zéro JS.
     </p>
     <div class="catalog-header__meta">
       <span class="badge" data-variant="success">finalisé</span>
@@ -36,25 +37,23 @@
     </div>
   </header>
 
-  <!-- Section : Groupes par priorité -->
+  <!-- Section : Groupes par priorité (ouverts) -->
   <section class="catalog-section" aria-labelledby="section-priority">
-    <h2 class="catalog-section__title" id="section-priority">Variantes de priorité — développées</h2>
+    <h2 class="catalog-section__title" id="section-priority">Variantes de priorité — ouvertes (attribut open)</h2>
 
     <div class="catalog-row">
-      <p class="catalog-row__label">data-priority="high" (groupe haute priorité)</p>
+      <p class="catalog-row__label">data-priority="high" — haute priorité</p>
       <div class="catalog-preview">
-        <section class="task-group" aria-labelledby="cat-group-high">
-          <div class="task-group__header">
-            <button class="task-group__toggle" type="button" aria-expanded="true" aria-controls="cat-group-high-list">
-              <svg class="icon task-group__chevron" aria-hidden="true"><use href="#icon-chevron-down"></use></svg>
-            </button>
+        <details class="task-group" open aria-labelledby="cat-group-high">
+          <summary class="task-group__header">
+            <svg class="icon task-group__chevron" aria-hidden="true"><use href="#icon-chevron-down"></use></svg>
             <h3 class="task-group__title" id="cat-group-high">
               <span class="task-group__priority-dot" data-priority="high" aria-hidden="true"></span>
               Haute priorité
             </h3>
             <span class="task-group__count" aria-label="2 tâches">2</span>
-          </div>
-          <ul class="task-group__list" id="cat-group-high-list">
+          </summary>
+          <ul class="task-group__list">
             <li class="task-row" data-state="in-progress" data-priority="high">
               <button class="task-row__handle btn" data-variant="ghost" data-size="sm" type="button" aria-label="Réordonner" tabindex="-1"><svg class="icon" aria-hidden="true"><use href="#icon-grip"></use></svg></button>
               <label class="task-row__check"><input class="checkbox__input" type="checkbox" aria-label="Marquer : Tâche en cours"></label>
@@ -86,25 +85,23 @@
               <div class="task-row__actions"><button class="btn task-row__menu-btn" data-variant="ghost" data-size="sm" type="button" aria-label="Actions"><svg class="icon" aria-hidden="true"><use href="#icon-more-h"></use></svg></button></div>
             </li>
           </ul>
-        </section>
+        </details>
       </div>
     </div>
 
     <div class="catalog-row">
       <p class="catalog-row__label">data-priority="normal"</p>
       <div class="catalog-preview">
-        <section class="task-group" aria-labelledby="cat-group-normal">
-          <div class="task-group__header">
-            <button class="task-group__toggle" type="button" aria-expanded="true" aria-controls="cat-group-normal-list">
-              <svg class="icon task-group__chevron" aria-hidden="true"><use href="#icon-chevron-down"></use></svg>
-            </button>
+        <details class="task-group" open aria-labelledby="cat-group-normal">
+          <summary class="task-group__header">
+            <svg class="icon task-group__chevron" aria-hidden="true"><use href="#icon-chevron-down"></use></svg>
             <h3 class="task-group__title" id="cat-group-normal">
               <span class="task-group__priority-dot" data-priority="normal" aria-hidden="true"></span>
               Priorité normale
             </h3>
             <span class="task-group__count" aria-label="1 tâche">1</span>
-          </div>
-          <ul class="task-group__list" id="cat-group-normal-list">
+          </summary>
+          <ul class="task-group__list">
             <li class="task-row" data-state="default" data-priority="normal">
               <button class="task-row__handle btn" data-variant="ghost" data-size="sm" type="button" aria-label="Réordonner" tabindex="-1"><svg class="icon" aria-hidden="true"><use href="#icon-grip"></use></svg></button>
               <label class="task-row__check"><input class="checkbox__input" type="checkbox" aria-label="Marquer : Tâche normale"></label>
@@ -115,7 +112,7 @@
               <div class="task-row__actions"><button class="btn task-row__menu-btn" data-variant="ghost" data-size="sm" type="button" aria-label="Actions"><svg class="icon" aria-hidden="true"><use href="#icon-more-h"></use></svg></button></div>
             </li>
           </ul>
-        </section>
+        </details>
       </div>
     </div>
 
@@ -125,17 +122,15 @@
   <section class="catalog-section" aria-labelledby="section-done">
     <h2 class="catalog-section__title" id="section-done">Groupe "Terminées" (.task-group__title--done)</h2>
     <div class="catalog-preview">
-      <section class="task-group" aria-labelledby="cat-group-done">
-        <div class="task-group__header">
-          <button class="task-group__toggle" type="button" aria-expanded="true" aria-controls="cat-group-done-list">
-            <svg class="icon task-group__chevron" aria-hidden="true"><use href="#icon-chevron-down"></use></svg>
-          </button>
+      <details class="task-group" open aria-labelledby="cat-group-done">
+        <summary class="task-group__header">
+          <svg class="icon task-group__chevron" aria-hidden="true"><use href="#icon-chevron-down"></use></svg>
           <h3 class="task-group__title task-group__title--done" id="cat-group-done">
             Terminées
           </h3>
           <span class="task-group__count" aria-label="3 tâches terminées">3</span>
-        </div>
-        <ul class="task-group__list" id="cat-group-done-list">
+        </summary>
+        <ul class="task-group__list">
           <li class="task-row" data-state="done">
             <button class="task-row__handle btn" data-variant="ghost" data-size="sm" type="button" aria-label="Réordonner" tabindex="-1"><svg class="icon" aria-hidden="true"><use href="#icon-grip"></use></svg></button>
             <label class="task-row__check"><input class="checkbox__input" type="checkbox" checked aria-label="Rouvrir : Tâche terminée"></label>
@@ -146,33 +141,36 @@
             <div class="task-row__actions"><button class="btn task-row__menu-btn" data-variant="ghost" data-size="sm" type="button" aria-label="Actions"><svg class="icon" aria-hidden="true"><use href="#icon-more-h"></use></svg></button></div>
           </li>
         </ul>
-      </section>
+      </details>
     </div>
   </section>
 
-  <!-- Section : Replié -->
+  <!-- Section : État replié (sans attribut open) -->
   <section class="catalog-section" aria-labelledby="section-collapsed">
-    <h2 class="catalog-section__title" id="section-collapsed">État replié (aria-expanded="false")</h2>
+    <h2 class="catalog-section__title" id="section-collapsed">État replié (sans attribut open) — cliquer pour déplier</h2>
+    <p class="catalog-section__note">Le toggle est natif : cliquer le header déploie/replie le groupe sans JS.</p>
     <div class="catalog-preview">
-      <section class="task-group" aria-labelledby="cat-group-collapsed">
-        <div class="task-group__header">
-          <button class="task-group__toggle" type="button" aria-expanded="false" aria-controls="cat-group-collapsed-list">
-            <svg class="icon task-group__chevron" aria-hidden="true"><use href="#icon-chevron-down"></use></svg>
-          </button>
+      <details class="task-group" aria-labelledby="cat-group-collapsed">
+        <summary class="task-group__header">
+          <svg class="icon task-group__chevron" aria-hidden="true"><use href="#icon-chevron-down"></use></svg>
           <h3 class="task-group__title" id="cat-group-collapsed">
             <span class="task-group__priority-dot" data-priority="low" aria-hidden="true"></span>
             Basse priorité
           </h3>
           <span class="task-group__count" aria-label="4 tâches">4</span>
-        </div>
-        <ul class="task-group__list" id="cat-group-collapsed-list" hidden>
+        </summary>
+        <ul class="task-group__list">
           <li class="task-row" data-state="default" data-priority="low">
+            <button class="task-row__handle btn" data-variant="ghost" data-size="sm" type="button" aria-label="Réordonner" tabindex="-1"><svg class="icon" aria-hidden="true"><use href="#icon-grip"></use></svg></button>
+            <label class="task-row__check"><input class="checkbox__input" type="checkbox" aria-label="Marquer : Contenu masqué"></label>
+            <span class="task-row__priority-dot" data-priority="low" aria-hidden="true"></span>
             <div class="task-row__content">
-              <span class="task-row__title">Contenu masqué</span>
+              <span class="task-row__title">Contenu visible après déploiement</span>
             </div>
+            <div class="task-row__actions"><button class="btn task-row__menu-btn" data-variant="ghost" data-size="sm" type="button" aria-label="Actions"><svg class="icon" aria-hidden="true"><use href="#icon-more-h"></use></svg></button></div>
           </li>
         </ul>
-      </section>
+      </details>
     </div>
   </section>
 

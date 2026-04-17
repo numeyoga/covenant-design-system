@@ -170,20 +170,21 @@ Modèle d'entrée — copier/coller pour chaque nouveau composant :
 - **Statut** : `finalisé`
 - **Écran d'origine** : todos v0.4
 - **Version DS ciblée** : DS 0.4
-- **Description** : Menu contextuel flottant. Le trigger est un `.btn`, le menu est un `<div role="menu">` avec `hidden` par défaut.
+- **Description** : Menu contextuel flottant. Implémenté via **Popover API + CSS Anchor Positioning** (Chrome 125+). Le menu est rendu dans le top layer du navigateur — ni `overflow:hidden` ni `contain:layout` ne peuvent le clipper.
 
 **États**
 | État | Implémenté | Notes |
 |------|-----------|-------|
-| fermé | ✓ | `hidden` sur `.dropdown__menu` |
-| ouvert | ✓ | `hidden` retiré, `aria-expanded="true"` |
+| fermé | ✓ | Géré nativement par `popover` type `auto` |
+| ouvert | ✓ | `popovertarget` + `aria-expanded="true"` (via JS `toggle` event) |
 | item hover | ✓ | `--color-bg-subtle` |
+| item actif | ✓ | `.dropdown__item--active` → couleur primaire |
 | item danger | ✓ | `data-variant="danger"` → texte rouge |
 
 **Modificateurs**
 | Classe | Description |
 |--------|-------------|
-| `.dropdown__menu--end` | Alignement à droite du trigger |
+| `.dropdown__menu--end` | Menu aligné à droite du trigger (`right: anchor(right)`) |
 
 ---
 
@@ -221,13 +222,13 @@ Modèle d'entrée — copier/coller pour chaque nouveau composant :
 - **Statut** : `finalisé`
 - **Écran d'origine** : todos v0.4
 - **Version DS ciblée** : DS 0.4
-- **Description** : Groupe de `task-row` avec en-tête pliable. L'en-tête affiche un point de priorité coloré, le titre et le compteur. Le toggle utilise `aria-expanded` + `aria-controls`.
+- **Description** : Groupe de `task-row` avec en-tête pliable natif. Implémenté via `<details>/<summary>` — le toggle ouvert/fermé est géré nativement par le navigateur, zéro JS. L'en-tête (`<summary>`) affiche un point de priorité coloré, le titre et le compteur.
 
 **États**
 | État | Implémenté | Notes |
 |------|-----------|-------|
-| développé | ✓ | `aria-expanded="true"` sur le toggle |
-| replié | ✓ | `aria-expanded="false"` → chevron pivoté à -90° |
+| développé | ✓ | Attribut `open` sur `<details>` |
+| replié | ✓ | Absence de `open` → chevron pivoté à -90° via `details:not([open])` |
 | groupe terminées | ✓ | `.task-group__title--done` → titre en muted |
 
 **Catalogue vivant** : `catalog/task-group/index.html`

@@ -24,7 +24,8 @@ Ce document est le catalogue des composants UI du design system. Chaque composan
 | 12 | Dropdown / Menu                 | `.dropdown`    | "Dropdowns / menus"                         |
 | 13 | Tabs                            | `.tabs`        | "Tabs"                                      |
 | 14 | Tooltip                         | `.tooltip`     | "Tooltips"                                  |
-| 15 | Récapitulatif                   | —              | Référence rapide                            |
+| 15 | Accordion / Section repliable   | `<details>`    | "Accordion, collapsible sections"           |
+| 16 | Récapitulatif                   | —              | Référence rapide                            |
 
 ---
 
@@ -1063,21 +1064,51 @@ Ajouter `font-variant-numeric: tabular-nums` sur toute colonne contenant des val
 
 ## 12. Dropdown / Menu — `.dropdown`
 
+> **Implémentation recommandée** : Popover API + CSS Anchor Positioning (Baseline 2024 / Chrome 125+).
+> Ces deux APIs rendent le menu dans le **top layer** du navigateur : ni `overflow: hidden`, ni `contain: layout` ne peuvent le clipper ou capturer son positionnement.
+> Voir `07-regles-code.md §3.11` pour le détail du problème et de la solution.
+
 ### 12.1 Markup
 
+Chaque instance nécessite un `id` unique sur le menu. L'`anchor-name` lie visuellement le menu à son trigger — c'est une exception documentée aux inline styles (voir `07-regles-code.md §3.7`).
+
 ```html
-<div class="dropdown" data-js-dropdown>
-  <button class="btn" data-variant="secondary"
-          aria-expanded="false" aria-haspopup="true"
+<!-- Dropdown standard — menu aligné à gauche du trigger -->
+<div class="dropdown">
+  <button class="btn" data-variant="secondary" type="button"
+          popovertarget="menu-actions"
+          style="anchor-name: --anc-actions"
+          aria-expanded="false" aria-haspopup="menu"
           data-js-dropdown-trigger>
     Actions
-    <svg class="btn__icon" aria-hidden="true">...</svg>
+    <svg class="icon" aria-hidden="true">...</svg>
   </button>
-  <div class="dropdown__menu" role="menu" hidden>
-    <button class="dropdown__item" role="menuitem">Modifier</button>
-    <button class="dropdown__item" role="menuitem">Dupliquer</button>
+  <div class="dropdown__menu" id="menu-actions" popover
+       style="position-anchor: --anc-actions"
+       role="menu">
+    <button class="dropdown__item" role="menuitem" type="button">Modifier</button>
+    <button class="dropdown__item" role="menuitem" type="button">Dupliquer</button>
     <hr class="dropdown__separator">
-    <button class="dropdown__item" role="menuitem" data-variant="danger">Supprimer</button>
+    <button class="dropdown__item" role="menuitem" type="button"
+            data-variant="danger">Supprimer</button>
+  </div>
+</div>
+
+<!-- Dropdown aligné à droite (fin de toolbar, actions d'une ligne) -->
+<div class="dropdown">
+  <button class="btn" data-variant="ghost" type="button"
+          popovertarget="menu-sort"
+          style="anchor-name: --anc-sort"
+          aria-expanded="false" aria-haspopup="menu"
+          data-js-dropdown-trigger>
+    Trier
+    <svg class="icon" aria-hidden="true">...</svg>
+  </button>
+  <div class="dropdown__menu dropdown__menu--end" id="menu-sort" popover
+       style="position-anchor: --anc-sort"
+       role="menu">
+    <button class="dropdown__item dropdown__item--active" role="menuitem" type="button">Par date</button>
+    <button class="dropdown__item" role="menuitem" type="button">Par nom</button>
   </div>
 </div>
 ```
@@ -1085,33 +1116,39 @@ Ajouter `font-variant-numeric: tabular-nums` sur toute colonne contenant des val
 ### 12.2 CSS
 
 ```css
-/* Exception CSS Containment : contain: content retiré intentionnellement.
-   Le menu enfant utilise position: absolute/fixed pour se positionner
-   par rapport au viewport. contain: content capturerait ce positionnement.
-   Voir 07-regles-code.md §3.9. */
+/* Pas de position: relative — le menu est dans le top layer (Popover API),
+   aucun ancêtre ne peut le clipper via overflow ni contain. */
 .dropdown {
-  position: relative;
   display: inline-flex;
 }
 
-.dropdown__menu {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  z-index: var(--z-dropdown);
+/* Reset des styles UA du popover + positionnement ancré */
+.dropdown__menu[popover] {
+  margin: 0;
+  border: none;
+  color: inherit;
 
-  min-width: 10rem;
-  padding: var(--space-1) 0;
-  margin-top: var(--space-1);
+  /* CSS Anchor Positioning (Chrome 125+, Edge 125+) */
+  position: fixed;
+  inset: unset;
+  top: anchor(bottom);
+  left: anchor(left);
+  margin-block-start: var(--space-1);
+  position-try-fallbacks: flip-block; /* bascule au-dessus si pas de place en bas */
 
+  min-width: 11rem;
+  padding: var(--space-2) var(--space-1);
   background-color: var(--color-bg-default);
-  border: var(--border-width-default) solid var(--color-border-subtle);
-  border-radius: var(--radius-md);
-  box-shadow: var(--shadow-md);
+  border: var(--border-width-default) solid var(--color-border-default);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-dropdown);
+  z-index: var(--z-dropdown);
 }
 
-.dropdown__menu[hidden] {
-  display: none;
+/* Menu aligné à droite du trigger */
+.dropdown__menu--end[popover] {
+  left: unset;
+  right: anchor(right);
 }
 
 .dropdown__item {
@@ -1120,95 +1157,79 @@ Ajouter `font-variant-numeric: tabular-nums` sur toute colonne contenant des val
   gap: var(--gap-sm);
   width: 100%;
   padding: var(--padding-sm) var(--padding-md);
-
   font-size: var(--text-sm);
   color: var(--color-text-default);
   text-align: left;
   white-space: nowrap;
-
+  border-radius: var(--radius-sm);
   cursor: pointer;
   transition: background-color var(--duration-instant) var(--ease-default);
 }
+.dropdown__item .icon { color: var(--color-text-muted); }
 
 .dropdown__item:hover,
 .dropdown__item:focus-visible {
   background-color: var(--color-bg-subtle);
 }
 
-.dropdown__item[data-variant="danger"] {
-  color: var(--color-danger-text);
+.dropdown__item--active {
+  color: var(--color-primary);
+  font-weight: var(--font-weight-medium);
 }
 
-.dropdown__item[data-variant="danger"]:hover {
-  background-color: var(--color-danger-subtle);
-}
+.dropdown__item[data-variant="danger"] { color: var(--color-danger-text); }
+.dropdown__item[data-variant="danger"]:hover { background-color: var(--color-danger-subtle); }
 
 .dropdown__separator {
   height: 0;
-  margin: var(--space-1) 0;
+  margin: var(--space-2) var(--padding-md);
   border: 0;
   border-top: var(--border-width-default) solid var(--color-border-subtle);
+}
+
+/* Rotation du chevron quand le menu est ouvert */
+[data-js-dropdown-trigger] .icon:last-child {
+  transition: transform var(--duration-fast) var(--ease-default);
+}
+[data-js-dropdown-trigger][aria-expanded="true"] .icon:last-child {
+  transform: rotate(180deg);
 }
 ```
 
 ### 12.3 Comportement JS
 
+Le Popover API gère nativement : light-dismiss (clic extérieur), Escape, et une seule instance ouverte à la fois (type `auto` par défaut). Le JS se limite à synchroniser `aria-expanded` et fermer le menu au clic d'un item.
+
 ```js
 // js/components/dropdown.js
-export function initDropdown(root) {
-  const trigger = root.querySelector('[data-js-dropdown-trigger]');
-  const menu = root.querySelector('[role="menu"]');
-  const items = menu.querySelectorAll('[role="menuitem"]');
-
-  function open() {
-    menu.hidden = false;
-    trigger.setAttribute('aria-expanded', 'true');
-    items[0]?.focus();
-  }
-
-  function close() {
-    menu.hidden = true;
-    trigger.setAttribute('aria-expanded', 'false');
-    trigger.focus();
-  }
-
-  trigger.addEventListener('click', () => {
-    menu.hidden ? open() : close();
+export function initDropdowns(root = document) {
+  // Synchronise aria-expanded via l'événement toggle du Popover API
+  root.querySelectorAll('[popover].dropdown__menu').forEach(menu => {
+    menu.addEventListener('toggle', e => {
+      const trigger = root.querySelector(`[popovertarget="${menu.id}"]`);
+      if (trigger) {
+        trigger.setAttribute('aria-expanded', e.newState === 'open' ? 'true' : 'false');
+      }
+    });
   });
 
-  // Fermer sur Escape
-  menu.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') close();
-  });
-
-  // Navigation clavier dans le menu
-  menu.addEventListener('keydown', (e) => {
-    const current = document.activeElement;
-    const index = [...items].indexOf(current);
-
-    if (e.key === 'ArrowDown') {
-      e.preventDefault();
-      items[(index + 1) % items.length]?.focus();
-    }
-    if (e.key === 'ArrowUp') {
-      e.preventDefault();
-      items[(index - 1 + items.length) % items.length]?.focus();
-    }
-  });
-
-  // Fermer si clic extérieur
-  document.addEventListener('click', (e) => {
-    if (!root.contains(e.target)) close();
+  // Ferme le menu quand un item est cliqué
+  root.addEventListener('click', e => {
+    const item = e.target.closest('.dropdown__item');
+    if (item) item.closest('[popover]')?.hidePopover();
   });
 }
 ```
 
+> **Navigation clavier (production)** : la navigation ArrowDown/ArrowUp entre les `[role="menuitem"]` n'est pas gérée par le Popover API et doit être ajoutée manuellement pour une conformité WCAG 2.2 complète. Elle est hors scope des maquettes de prototypage.
+
 ### 12.4 Accessibilité
 
-- Le trigger porte `aria-expanded` et `aria-haspopup="true"`.
-- Le menu porte `role="menu"`, chaque item porte `role="menuitem"`.
-- Les flèches haut/bas naviguent entre les items.
-- Escape ferme le menu et rend le focus au trigger.
+- Le trigger porte `aria-expanded` (géré via JS `toggle` event) et `aria-haspopup="menu"`.
+- Le menu porte `role="menu"`, chaque item porte `role="menuitem"` et `type="button"`.
+- Escape et clic extérieur ferment le menu **nativement** via le Popover API (type `auto`).
+- Les `id` de menus et `popovertarget` correspondants doivent être **uniques dans le document**.
+- Les actions destructives sont **en dernière position**, séparées par `.dropdown__separator`, avec `data-variant="danger"`.
 
 ---
 
@@ -1403,32 +1424,138 @@ export function initTabs(root) {
 
 ---
 
-## 15. Récapitulatif des composants
+## 15. Accordion / Section repliable — `<details>`
 
-| Composant    | Fichier CSS           | Fichier JS            | Interactif ? | Section |
-| ------------ | --------------------- | --------------------- | ------------ | ------- |
-| Button       | `button.css`          | —                     | Non*         | 2       |
-| Input        | `input.css`           | —                     | Non*         | 3       |
-| Textarea     | `textarea.css`        | —                     | Non*         | 4       |
-| Select       | `select.css`          | —                     | Non*         | 5       |
-| Checkbox     | `checkbox.css`        | —                     | Non*         | 6       |
-| Radio        | `radio.css`           | —                     | Non*         | 6       |
-| Toggle       | `toggle.css`          | —                     | Non*         | 7       |
-| Card         | `card.css`            | —                     | Non          | 8       |
-| Data Table   | `data-table.css`      | `data-table.js`       | Oui          | 9       |
-| Badge        | `badge.css`           | —                     | Non          | 10      |
-| Alert        | `alert.css`           | —                     | Non          | 11      |
-| Dropdown     | `dropdown.css`        | `dropdown.js`         | Oui          | 12      |
-| Tabs         | `tabs.css`            | `tabs.js`             | Oui          | 13      |
-| Tooltip      | `tooltip.css`         | `tooltip.js`          | Oui          | 14      |
+> Utiliser `<details>` + `<summary>` comme composant natif de section repliable. Le toggle ouvert/fermé est entièrement géré par le navigateur — **zéro JS requis**.
 
-_*Les contrôles de formulaire sont interactifs par nature HTML mais ne nécessitent pas de JS custom pour leur comportement de base._
+### 15.1 Markup
+
+```html
+<!-- Section ouverte par défaut (attribut open) -->
+<details class="accordion" open>
+  <summary class="accordion__header">
+    <svg class="icon accordion__chevron" aria-hidden="true">
+      <use href="#icon-chevron-down"></use>
+    </svg>
+    <span class="accordion__title">Titre de la section</span>
+    <span class="accordion__count" aria-label="3 éléments">3</span>
+  </summary>
+  <div class="accordion__body">
+    <!-- Contenu -->
+  </div>
+</details>
+
+<!-- Section fermée par défaut (sans attribut open) -->
+<details class="accordion">
+  <summary class="accordion__header">
+    <svg class="icon accordion__chevron" aria-hidden="true">
+      <use href="#icon-chevron-down"></use>
+    </svg>
+    <span class="accordion__title">Titre replié</span>
+  </summary>
+  <div class="accordion__body">
+    <!-- Contenu -->
+  </div>
+</details>
+```
+
+### 15.2 CSS
+
+```css
+/* Reset du marker natif de <summary> (triangle du navigateur) */
+.accordion__header { list-style: none; }
+.accordion__header::-webkit-details-marker { display: none; }
+
+.accordion__header {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-sm);
+  padding: var(--padding-sm) var(--padding-md);
+  background-color: var(--color-bg-subtle);
+  border-bottom: var(--border-width-default) solid var(--color-border-subtle);
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
+  cursor: pointer;
+}
+
+/* Quand replié : plus de bordure basse, border-radius complet */
+details.accordion:not([open]) > .accordion__header {
+  border-bottom: none;
+  border-radius: var(--radius-md);
+}
+
+.accordion__chevron {
+  width: 0.875rem;
+  height: 0.875rem;
+  flex-shrink: 0;
+  color: var(--color-text-muted);
+  transition: transform var(--duration-fast) var(--ease-default);
+}
+.accordion__header:hover .accordion__chevron { color: var(--color-text-default); }
+
+/* Chevron pointant à droite quand la section est repliée */
+details.accordion:not([open]) > .accordion__header .accordion__chevron {
+  transform: rotate(-90deg);
+}
+
+.accordion__title {
+  flex: 1;
+  font-size: var(--text-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-default);
+}
+
+.accordion__count {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  font-weight: var(--font-weight-medium);
+  background-color: var(--color-bg-muted);
+  padding: 0 var(--space-2);
+  border-radius: var(--radius-full);
+  min-width: 1.25rem;
+  text-align: center;
+}
+```
+
+> **`border-radius` sur les enfants, pas `overflow: hidden` sur le parent.** Si le corps de l'accordion contient des dropdowns, ne pas utiliser `overflow: hidden` sur `.accordion` — cela clipperait les menus. Appliquer les arrondis sur `.accordion__header` et le dernier enfant de `.accordion__body` directement. Voir `07-regles-code.md §3.11`.
+
+### 15.3 Accessibilité
+
+- Le rôle ARIA implicite de `<summary>` est `button` avec `aria-expanded` géré nativement par le navigateur — **ne pas l'ajouter manuellement**.
+- Le reset `::-webkit-details-marker` / `list-style: none` supprime le triangle visuel sans nuire à l'accessibilité : le rôle et l'état restent dans l'arbre d'accessibilité.
+- Utiliser l'attribut `open` pour les sections ouvertes par défaut (pas de JS).
+- Si le `<summary>` contient uniquement une icône chevron sans texte visible, ajouter `aria-label` sur le `<details>` ou un texte `.sr-only` dans le `<summary>`.
 
 ---
 
-## 16. Versioning de ce document
+## 16. Récapitulatif des composants
 
-| Version | Date       | Changement                              |
-| ------- | ---------- | --------------------------------------- |
-| 0.1     | 2026-03-25 | Création initiale                       |
-| 0.2     | 2026-04-11 | Ajout convention CSS Containment (item 8) |
+| Composant          | Fichier CSS           | Fichier JS            | Interactif ? | Section |
+| ------------------ | --------------------- | --------------------- | ------------ | ------- |
+| Button             | `button.css`          | —                     | Non*         | 2       |
+| Input              | `input.css`           | —                     | Non*         | 3       |
+| Textarea           | `textarea.css`        | —                     | Non*         | 4       |
+| Select             | `select.css`          | —                     | Non*         | 5       |
+| Checkbox           | `checkbox.css`        | —                     | Non*         | 6       |
+| Radio              | `radio.css`           | —                     | Non*         | 6       |
+| Toggle             | `toggle.css`          | —                     | Non*         | 7       |
+| Card               | `card.css`            | —                     | Non          | 8       |
+| Data Table         | `data-table.css`      | `data-table.js`       | Oui          | 9       |
+| Badge              | `badge.css`           | —                     | Non          | 10      |
+| Alert              | `alert.css`           | —                     | Non          | 11      |
+| Dropdown           | `dropdown.css`        | `dropdown.js`         | Oui (Popover)| 12      |
+| Tabs               | `tabs.css`            | `tabs.js`             | Oui          | 13      |
+| Tooltip            | `tooltip.css`         | `tooltip.js`          | Oui          | 14      |
+| Accordion/Repliable| `accordion.css`       | — (natif)             | Non*         | 15      |
+
+_*Les contrôles de formulaire sont interactifs par nature HTML mais ne nécessitent pas de JS custom pour leur comportement de base. L'Accordion utilise `<details>/<summary>` natif._
+
+---
+
+## 17. Versioning de ce document
+
+| Version | Date       | Changement                                                   |
+| ------- | ---------- | ------------------------------------------------------------ |
+| 0.1     | 2026-03-25 | Création initiale                                            |
+| 0.2     | 2026-04-11 | Ajout convention CSS Containment (item 8)                    |
+| 0.3     | 2026-04-17 | §12 Dropdown : migration Popover API + CSS Anchor Positioning |
+| 0.3     | 2026-04-17 | §15 Accordion : ajout `<details>/<summary>` comme composant natif |

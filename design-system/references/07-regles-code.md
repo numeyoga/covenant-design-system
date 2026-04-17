@@ -94,6 +94,9 @@ Les éléments HTML doivent être choisis pour leur **sémantique**, pas pour le
 | Contenu temporel              | `<time datetime="...">`      | Texte brut                     |
 | Image informative             | `<img alt="description">`    | `<div style="background:...">`|
 | Image décorative              | `<img alt="" role="none">`   | `alt` non vide                 |
+| Section repliable / accordion | `<details>` + `<summary>`    | `<div>` + `<button>` + JS     |
+| Modale / dialogue             | `<dialog>` + `showModal()`   | `<div class="modal">` + JS    |
+| Menu / dropdown               | `<div popover>` + `popovertarget` | `<div>` + JS position      |
 
 ### 2.4 Attributs `data-*`
 
@@ -353,6 +356,8 @@ Par exception, certaines valeurs brutes sont acceptées dans le CSS applicatif :
 | `inherit`, `currentColor`     | Héritage explicite                                   |
 | `1fr`, `minmax()`, `span N`   | Propriétés de grille CSS                             |
 | `calc()` combinant des tokens | Ex: `calc(100% - var(--shell-nav-width))`            |
+| `style="anchor-name: --anc-*"` en HTML | CSS Anchor Positioning : lie un trigger à son menu flottant. L'`anchor-name` doit correspondre au `position-anchor` du menu. Usage limité aux dropdowns/tooltips. Voir `03-composants.md §12`. |
+| `style="position-anchor: --anc-*"` en HTML | Pendant du point ci-dessus, sur l'élément `[popover]`. |
 
 Tout le reste (couleurs hex/rgb, px pour espacement, ms pour durées, rem pour tailles) doit passer par un token.
 
@@ -950,3 +955,4 @@ Avant de valider un fichier, vérifier les points suivants :
 | 0.3     | 2026-04-11 | Ajout `<footer class="app-shell__status">` dans le template HTML de base   |
 | 0.4     | 2026-04-16 | Focus style §3.5 : adoption technique double anneau `box-shadow`           |
 | 0.5     | 2026-04-17 | §3.9 : `contain: layout` capture aussi `position: absolute` (pas seulement `fixed`) — §3.11 : overflow vs flottants + Popover API + CSS Anchor Positioning — §3.12 : HTML natif avant JS |
+| 0.6     | 2026-04-17 | §2.3 : ajout `<details>/<summary>`, `<dialog>`, `popover` dans le tableau HTML sémantique — §3.7 : exception `anchor-name`/`position-anchor` inline style documentée |

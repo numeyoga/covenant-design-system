@@ -32,18 +32,22 @@ project/
 ├── app-shells.md                   ← Déclinaisons App Shell disponibles
 ├── catalog.md                      ← Registre composants (états, statuts, descriptions)
 ├── catalog/
+│   ├── tokens.css                  ← Tous les tokens DS (copie de la version courante)
+│   ├── catalog.css                 ← Chrome des pages de catalogue (layout, header, section)
 │   └── [composant]/
 │       ├── index.html              ← Catalogue vivant du composant
-│       └── component.css
+│       └── component.css          ← CSS isolé du composant (auto-suffisant, dépend de tokens.css)
 ├── design-system/                  ← DS versionné (référence externe)
 └── screens/
     └── [nom-ecran]/
         ├── brief.md                ← Phase 1 : expression du besoin
         ├── session.md              ← Distillation inter-sessions
         ├── index.html              ← Prototype itératif
-        ├── layout.css              ← Styles de mise en page
-        └── components.css         ← Styles composants de cet écran
+        ├── layout.css              ← Styles de mise en page + tokens additionnels
+        └── components.css         ← Styles composants de cet écran (plat, tous composants)
 ```
+
+**Convention `catalog/`** : chaque `component.css` est **auto-suffisant** — il contient tout le CSS nécessaire pour afficher le composant isolément (y compris les styles de composants dont il dépend). Il référence `../tokens.css` implicitement via l'ordre de chargement dans `index.html`. Un composant de catalogue qui dépend d'un autre (ex: `task-group` → `task-row`) le documente en commentaire en tête de fichier et le charge dans son `index.html`.
 
 ---
 
@@ -234,6 +238,7 @@ un état vide utile, une densité mieux calibrée...
 **Règles :**
 
 - Consulter `catalog.md` **avant** de définir un nouveau composant — s'il existe, l'utiliser.
+- **HTML natif avant JS** : avant de créer un composant toggle/accordion/modal/dropdown custom, vérifier `03-composants.md` §12 (Dropdown), §15 (Accordion) et `07-regles-code.md §3.12` pour les équivalents natifs (`<details>`, `popover`, `<dialog>`). Zéro JS vaut mieux qu'un JS custom.
 - BEM appliqué sur tous les composants (`block__element--modifier`).
 - `data-js-*` posés sur les éléments actionnables comme marqueurs d'intention (non implémentés).
 - Données statiques représentatives (pas de `Lorem ipsum` — des données métier réalistes).
@@ -267,6 +272,7 @@ un état vide utile, une densité mieux calibrée...
 - [ ] L'App Shell est correctement structuré : topbar + main + statusbar (+ sidenav si déclinaison B)
 - [ ] Aucun Lorem ipsum ni "Item 1 / Item 2" dans les données
 - [ ] Les contrastes WCAG AA sont respectés sur toutes les combinaisons texte/fond visibles
+- [ ] **Testé dans le navigateur** : hover, focus, dropdowns, toggles et états disabled fonctionnels visuellement — les bugs de rendu ne sont détectables qu'en navigateur
 
 ---
 
